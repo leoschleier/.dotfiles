@@ -48,6 +48,8 @@ return require('packer').startup(function(use)
 
     use 'tpope/vim-fugitive'
 
+    use 'github/copilot.vim'
+
     -- Help for setting up the LSP client 
     use {
         'VonHeikemen/lsp-zero.nvim',
@@ -68,6 +70,11 @@ return require('packer').startup(function(use)
     -- Language specific
     -- Used for setting up rust_analyzer
     use 'simrat39/rust-tools.nvim'
+
+    use({
+        "iamcco/markdown-preview.nvim",
+        run = function() vim.fn["mkdp#util#install"]() end,
+    })
 
     if packer_bootstrap then
         require('packer').sync()
