@@ -1,7 +1,8 @@
 #!/bin/bash
 
-mkdir -p $HOME/.config
+mkdir -p ~/.config
 
-ln -sfn $HOME/.dotfiles/nvim $HOME/.config/nvim
-ln -sfn $HOME/.dotfiles/zsh/.zshrc $HOME/.zshrc
-ln -sfn $HOME/.dotfiles/ghostty $HOME/.config/ghostty
+ln -sfn ~/.dotfiles/nvim ~/.config/nvim
+ln -sfn ~/.dotfiles/zsh/.zshrc ~/.zshrc
+ln -sfn ~/.dotfiles/ghostty ~/.config/ghostty
+ln -sfn ~/.dotfiles/tmux/.tmux.conf ~/.tmux.conf
