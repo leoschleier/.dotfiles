@@ -1,2 +1,5 @@
 theme = rose-pine
 font-size = 16
+font-feature = -calt
+font-feature = -dlig
+font-feature = -liga
