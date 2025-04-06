@@ -100,7 +100,6 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 #
-eval "$(mcfly init zsh)"
 
 # Configure pager used by git.
 export LESS="FRX"
