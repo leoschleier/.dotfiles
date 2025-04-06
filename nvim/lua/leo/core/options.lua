@@ -29,7 +29,7 @@ opt.scrolloff = 8
 opt.termguicolors = true
 opt.background = "dark"
 opt.signcolumn = "yes"
-opt.colorcolumn = "80"
+opt.colorcolumn = "81"
 
 -- Backspace
 opt.backspace = "indent,eol,start"

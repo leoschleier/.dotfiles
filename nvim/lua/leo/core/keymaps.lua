@@ -2,7 +2,7 @@ vim.g.mapleader = " "
 
 local keymap = vim.keymap -- for conciseness
 
--- general keymaps
+-- Keymaps
 keymap.set("i", "<C-c>", "<ESC>") -- Quit INSERT mode
 
 keymap.set("n", "<leader>ex", vim.cmd.Ex)
@@ -24,10 +24,7 @@ keymap.set("n", "<leader>tx", ":tabclose<CR>") -- Close current tab
 keymap.set("n", "<leader>tn", ":tabn<CR>") -- Go to next tab
 keymap.set("n", "<leader>tp", ":tabp<CR>") -- Go to previous tab
 
--- vim-maximizer
-keymap.set("n", "<leader>sm", ":MaximizerToggle<CR>")
-
--- Primagean
+-- Macros
 keymap.set("v", "J", ":m '>+1<CR>gv=gv") -- Move line/block down
 keymap.set("v", "K", ":m '<-2<CR>gv=gv") -- Move line/block up
 

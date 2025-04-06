@@ -1,3 +1,2 @@
-require("leo.packer")
-require("leo.set")
-require("leo.remap")
+require("leo.core")
+require("leo.lazy")
