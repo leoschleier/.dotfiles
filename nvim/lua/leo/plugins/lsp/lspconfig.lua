@@ -5,6 +5,7 @@ return {
             "williamboman/mason-lspconfig.nvim",
             "hrsh7th/cmp-nvim-lsp",
             "folke/lazydev.nvim",
+            "mrcjkb/rustaceanvim",
             ft = "lua", -- only load on lua files
             opts = {
                 library = {
@@ -79,7 +80,7 @@ return {
         -- Enable autocompletion (assign to every lsp server config)
         local capabilities = cmp_nvim_lsp.default_capabilities()
 
-        mason_lspconfig.setup_handlers({
+        mason_lspconfig.setup({
             -- Default handler for installed servers
             function(server_name)
                 lspconfig[server_name].setup({
