@@ -86,7 +86,18 @@ return {
             },
             marksman = {},
             pyright = {},
-            -- rust_analyzer = {}, Configured by rustaceanvim
+            rust_analyzer = {
+                settings = {
+                    ["rust-analyzer"] = {
+                        cargo = {
+                            allFeatures = true,
+                        },
+                        checkOnSave = {
+                            command = "clippy",
+                        },
+                    },
+                },
+            },
             taplo = {},
             yamlls = {},
         }
