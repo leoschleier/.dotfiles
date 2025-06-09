@@ -2,10 +2,8 @@ return {
     "neovim/nvim-lspconfig",
     dependencies = {
         {
-            "williamboman/mason-lspconfig.nvim",
             "hrsh7th/cmp-nvim-lsp",
             "folke/lazydev.nvim",
-            "mrcjkb/rustaceanvim",
             ft = "lua", -- only load on lua files
             opts = {
                 library = {
@@ -17,13 +15,7 @@ return {
         }
     },
     config = function()
-        -- import lspconfig plugin
         local lspconfig = require("lspconfig")
-
-        -- import mason_lspconfig plugin
-        local mason_lspconfig = require("mason-lspconfig")
-
-        -- import cmp-nvim-lsp plugin
         local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
         local keymap = vim.keymap
@@ -80,52 +72,28 @@ return {
         -- Enable autocompletion (assign to every lsp server config)
         local capabilities = cmp_nvim_lsp.default_capabilities()
 
-        mason_lspconfig.setup({
-            -- Default handler for installed servers
-            function(server_name)
-                lspconfig[server_name].setup({
-                    capabilities = capabilities,
-                })
-            end,
-            ["lua_ls"] = function()
-                -- configure lua server (with special settings)
-                lspconfig["lua_ls"].setup({
-                    capabilities = capabilities,
-                    settings = {
-                        Lua = {
-                            -- make the language server recognize "vim" global
-                            diagnostics = {
-                                globals = { "vim" },
-                            },
+        local servers = {
+            jsonls = {},
+            lua_ls = {
+                settings = {
+                    Lua = {
+                        -- make the language server recognize "vim" global
+                        diagnostics = {
+                            globals = { "vim" },
                         },
                     },
-                })
-            end,
-        })
-
-        vim.g.rustaceanvim = {
-            -- LSP configuration
-            server = {
-                on_attach = function(_, bufnr)
-                    vim.keymap.set(
-                        "n",
-                        "<leader>ca",
-                        function()
-                            vim.cmd.RustLsp('codeAction') -- supports rust-analyzer's grouping
-                            -- or vim.lsp.buf.codeAction() if you don't want grouping.
-                        end,
-                        { silent = true, buffer = bufnr }
-                    )
-                    vim.keymap.set(
-                        "n",
-                        "K",  -- Override Neovim's built-in hover keymap with rustaceanvim's hover actions
-                        function()
-                            vim.cmd.RustLsp({'hover', 'actions'})
-                        end,
-                        { silent = true, buffer = bufnr }
-                    )
-                end,
-            }
+                },
+            },
+            marksman = {},
+            pyright = {},
+            -- rust_analyzer = {}, Configured by rustaceanvim
+            taplo = {},
+            yamlls = {},
         }
+
+        for server, config in pairs(servers) do
+            config.capabilities = capabilities
+            lspconfig[server].setup(config)
+        end
     end,
 }
