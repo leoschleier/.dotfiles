@@ -7,7 +7,7 @@ return {
             "lua_ls",
             "marksman",
             "pyright",
-            "rust_analyzer",
+            -- "rust_analyzer", Requires manual installation due to issues with rust-analyzer in combination with mason-lspconfig
             "taplo",
             "yamlls",
         },
