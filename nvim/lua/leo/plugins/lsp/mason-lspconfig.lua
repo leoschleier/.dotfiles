@@ -1,6 +1,7 @@
 return {
     "williamboman/mason-lspconfig.nvim",
     opts = {
+        automatic_enable = false, -- Enabled via nvim-lspconfig
         ensure_installed = {
             "jsonls",
             "lua_ls",
@@ -12,7 +13,7 @@ return {
         },
     },
     dependencies = {
-        { "mason-org/mason.nvim", opts = {} },
+        "mason-org/mason.nvim",
         "neovim/nvim-lspconfig",
     },
 }
