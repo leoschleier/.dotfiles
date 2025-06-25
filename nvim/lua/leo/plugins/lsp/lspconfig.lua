@@ -73,6 +73,7 @@ return {
         local capabilities = cmp_nvim_lsp.default_capabilities()
 
         local servers = {
+            dockerls = {},
             jsonls = {},
             lua_ls = {
                 settings = {

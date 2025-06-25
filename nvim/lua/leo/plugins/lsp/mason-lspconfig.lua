@@ -3,6 +3,7 @@ return {
     opts = {
         automatic_enable = false, -- Enabled via nvim-lspconfig
         ensure_installed = {
+            "dockerls",
             "jsonls",
             "lua_ls",
             "marksman",
