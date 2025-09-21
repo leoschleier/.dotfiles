@@ -116,3 +116,4 @@ zle -N fzf-tmux
 
 bindkey "^f"  fzf-tmux
 
+. "$HOME/.local/bin/env"
