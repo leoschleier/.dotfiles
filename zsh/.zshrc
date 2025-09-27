@@ -108,7 +108,19 @@ export LESS="FRX"
 source <(fzf --zsh)
 
 function fzf-tmux(){
-    BUFFER="cd $(find $HOME/workdir/* -maxdepth 0 -type d | fzf) && tmux"
+    dir=$(
+        {
+            find $HOME/workdir/* -maxdepth 0 -type d 2>/dev/null
+            echo "$HOME/.dotfiles"
+        } | fzf
+    ) || return
+
+    BUFFER="cd \"$dir\""
+
+    if [[ -z "$TMUX" ]]; then
+        BUFFER+=" && tmux"
+    fi
+
     zle accept-line
 }
 
