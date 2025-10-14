@@ -15,7 +15,6 @@ return {
         }
     },
     config = function()
-        local lspconfig = require("lspconfig")
         local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
         local keymap = vim.keymap
@@ -106,7 +105,8 @@ return {
 
         for server, config in pairs(servers) do
             config.capabilities = capabilities
-            lspconfig[server].setup(config)
+            vim.lsp.config(server, config)
+            vim.lsp.enable(server)
         end
     end,
 }
