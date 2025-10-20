@@ -8,6 +8,7 @@ return {
             "lua_ls",
             "marksman",
             "pyright",
+            "ruff",
             "rust_analyzer",
             "taplo",
             "yamlls",
