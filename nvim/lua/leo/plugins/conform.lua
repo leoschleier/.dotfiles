@@ -10,11 +10,12 @@ return {
                 "ruff_fix",
                 "ruff_format",
                 "ruff_organize_imports",
+                lsp_format = "never",
             },
             rust = { "rustfmt" },
         },
         format_on_save = {
-            lsp_format = "never",
+            lsp_format = "fallback",
             timeout_ms = 500,
         },
     }
