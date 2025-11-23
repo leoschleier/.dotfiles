@@ -1,7 +1,16 @@
 return {
-    "github/copilot.vim",
-    init = function()
-        -- Disable Copilot on startup
-        vim.g.copilot_enabled = false
+    "zbirenbaum/copilot.lua",
+    --[[
+    requires = {
+        "copilotlsp-nvim/copilot-lsp", -- (optional) for NES functionality
+    },
+    ]]
+    cmd = "Copilot",
+    -- For auto-start: event = "InsertEnter",
+    config = function()
+        require("copilot").setup({
+            suggestion = { enabled = false },
+            panel = { enabled = false },
+        })
     end,
 }
