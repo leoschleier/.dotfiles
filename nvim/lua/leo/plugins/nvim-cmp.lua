@@ -23,6 +23,10 @@ return {
         require("luasnip.loaders.from_vscode").lazy_load()
 
         cmp.setup({
+            window = {
+                completion = cmp.config.window.bordered(),
+                documentation = cmp.config.window.bordered(),
+            },
             auto_brackets = {}, -- configure any filetype to auto add brackets
             snippet = {         -- configure how nvim-cmp interacts with snippet engine
                 expand = function(args)
