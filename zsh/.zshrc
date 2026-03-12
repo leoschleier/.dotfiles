@@ -110,7 +110,7 @@ source <(fzf --zsh)
 function fzf-tmux(){
     dir=$(
         {
-            find $HOME/workdir/* -maxdepth 0 -type d 2>/dev/null
+            find $HOME/projects/* -maxdepth 0 -type d 2>/dev/null
             echo "$HOME/.dotfiles"
         } | fzf
     ) || return
