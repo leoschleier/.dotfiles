@@ -1,8 +1,16 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
+# Redirect zsh history to XDG state path (must be set before .zshrc).
+HISTFILE="${XDG_STATE_HOME:-$HOME/.local/state}/zsh/history"
+mkdir -p "$(dirname "$HISTFILE")"
+
+# Redirect zsh completion cache to XDG cache path.
+ZSH_COMPDUMP="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump"
+mkdir -p "$(dirname "$ZSH_COMPDUMP")"
+
 # Path to your oh-my-zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
+export ZSH="${XDG_DATA_HOME:-$HOME/.local/share}/oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -128,4 +136,7 @@ zle -N fzf-tmux
 
 bindkey "^f"  fzf-tmux
 
-. "$HOME/.local/bin/env"
+# nvm
+export NVM_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/nvm"
+[[ -s "$NVM_DIR/nvm.sh" ]] && . "$NVM_DIR/nvm.sh"
+[[ -s "$NVM_DIR/bash_completion" ]] && . "$NVM_DIR/bash_completion"
