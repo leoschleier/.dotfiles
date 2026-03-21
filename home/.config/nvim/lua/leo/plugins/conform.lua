@@ -5,7 +5,12 @@ return {
             lsp_format = "fallback",
         },
         formatters_by_ft = {
+            css = { "prettier" },
+            html = { "prettier" },
+            javascript = { "prettier" },
+            javascriptreact = { "prettier" },
             lua = { "stylua" },
+            markdown = { "prettier" },
             python = {
                 "ruff_fix",
                 "ruff_format",
@@ -13,6 +18,9 @@ return {
                 lsp_format = "never",
             },
             rust = { "rustfmt" },
+            sh = { "shfmt" },
+            typescript = { "prettier" },
+            typescriptreact = { "prettier" },
         },
         format_on_save = {
             lsp_format = "fallback",
