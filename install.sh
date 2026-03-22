@@ -2,6 +2,7 @@
 set -euo pipefail
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+COMMON_DIR="$DOTFILES_DIR/scripts/common"
 
 echo "=== Dotfiles Bootstrap ==="
 
@@ -14,10 +15,16 @@ case "$(uname -s)" in
         eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null || /usr/local/bin/brew shellenv 2>/dev/null || true)"
         ;;
     Linux)
-        # Future: detect distro and set SCRIPTS_DIR accordingly
-        # e.g. scripts/arch/, scripts/ubuntu/
-        echo "Linux support not yet implemented."
-        exit 1
+        echo "Detected Linux"
+        if command -v apt-get &>/dev/null; then
+            SCRIPTS_DIR="$DOTFILES_DIR/scripts/ubuntu"
+        else
+            echo "Unsupported Linux distribution (no apt-get found)."
+            exit 1
+        fi
+        "$SCRIPTS_DIR/apt.sh"
+        "$SCRIPTS_DIR/rustup.sh"
+        "$SCRIPTS_DIR/uv.sh"
         ;;
     *)
         echo "Unsupported OS: $(uname -s)"
@@ -25,9 +32,9 @@ case "$(uname -s)" in
         ;;
 esac
 
-"$SCRIPTS_DIR/oh-my-zsh.sh"
-"$SCRIPTS_DIR/stow.sh"
-"$SCRIPTS_DIR/nvm.sh"
+"$COMMON_DIR/oh-my-zsh.sh"
+"$COMMON_DIR/stow.sh"
+"$COMMON_DIR/nvm.sh"
 
 echo ""
 echo "=== Bootstrap complete ==="
