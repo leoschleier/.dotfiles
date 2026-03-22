@@ -4,7 +4,15 @@ Leo's .dotfiles.
 
 ## Bootstrap
 
-On a fresh macOS machine, clone and run:
+### macOS
+
+```bash
+git clone git@github.com:leoschleier/.dotfiles.git ~/.dotfiles
+cd ~/.dotfiles
+./install.sh
+```
+
+### Ubuntu (WSL)
 
 ```bash
 git clone git@github.com:leoschleier/.dotfiles.git ~/.dotfiles
@@ -18,23 +26,28 @@ Re-running `./install.sh` is safe — all scripts are idempotent.
 
 ```
 .dotfiles/
-├── home/              # Stow package — mirrors $HOME layout
-│   ├── .zshenv        # ZDOTDIR bootstrap (sets zsh config to ~/.config/zsh/)
+├── home/                  # Stow package — mirrors $HOME layout
+│   ├── .zshenv            # ZDOTDIR bootstrap (sets zsh config to ~/.config/zsh/)
 │   └── .config/
-│       ├── aerospace/
-│       ├── ghostty/
+│       ├── aerospace/     # macOS tiling WM (ignored on Linux)
+│       ├── ghostty/       # macOS/Linux terminal (ignored on WSL)
 │       ├── nvim/
 │       ├── opencode/
 │       ├── tmux/
 │       └── zsh/
 ├── scripts/
-│   └── macos/         # macOS-specific install modules
-│       ├── brew.sh    # Homebrew + packages
-│       ├── stow.sh    # GNU Stow symlinks
-│       ├── oh-my-zsh.sh
-│       └── nvm.sh     # nvm + Node LTS
-├── install.sh         # Main entry point (detects OS)
-└── .vscode/           # VS Code reference configs (not stowed)
+│   ├── common/            # Portable install modules (all platforms)
+│   │   ├── oh-my-zsh.sh
+│   │   ├── stow.sh        # GNU Stow symlinks
+│   │   └── nvm.sh         # nvm + Node LTS
+│   ├── macos/             # macOS-specific
+│   │   └── brew.sh        # Homebrew + packages + casks + rustup
+│   └── ubuntu/            # Ubuntu/WSL-specific
+│       ├── apt.sh         # apt packages + Neovim PPA
+│       ├── rustup.sh      # Rust toolchain
+│       └── uv.sh          # Python package manager
+├── install.sh             # Main entry point (detects OS)
+└── .vscode/               # VS Code reference configs (not stowed)
 ```
 
 Symlinks are managed by [GNU Stow](https://www.gnu.org/software/stow/). The `home/`
@@ -43,15 +56,19 @@ symlinks in `$HOME` matching the directory layout.
 
 ## What gets installed
 
-### Homebrew packages
+### macOS (Homebrew)
 
-neovim, tmux, fzf, stow, ripgrep, fd, uv, rustup
+| Packages                                         | Casks              |
+| ------------------------------------------------ | ------------------ |
+| neovim, tmux, fzf, stow, ripgrep, fd, uv, rustup | ghostty, aerospace |
 
-### Homebrew casks
+### Ubuntu / WSL (apt)
 
-ghostty, aerospace
+neovim (via PPA), tmux, fzf, stow, ripgrep, fd-find, zsh, curl, git, build-essential
 
-### Other
+Rustup and uv are installed via their official installers.
+
+### All platforms
 
 - **oh-my-zsh** — installed to `~/.local/share/oh-my-zsh`
 - **nvm + Node LTS** — installed to `~/.local/share/nvm`
