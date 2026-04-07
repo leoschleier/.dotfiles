@@ -109,32 +109,11 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 #
 
-# Configure pager used by git.
+# Configure pager used by git
 export LESS="FRX"
 
-# Set up fzf key bindings and fuzzy completion
-source <(fzf --zsh)
-
-function fzf-tmux(){
-    dir=$(
-        {
-            find $HOME/projects/* -maxdepth 0 -type d 2>/dev/null
-            echo "$HOME/.dotfiles"
-        } | fzf
-    ) || return
-
-    BUFFER="cd \"$dir\""
-
-    if [[ -z "$TMUX" ]]; then
-        BUFFER+=" && tmux"
-    fi
-
-    zle accept-line
-}
-
-zle -N fzf-tmux
-
-bindkey "^f"  fzf-tmux
+# tmux-sessionizer key bindings
+bindkey -s "^f" "tmux-sessionizer\n"
 
 # nvm
 export NVM_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/nvm"
