@@ -134,7 +134,8 @@
         "websearch": "allow",
     },
     "plugin": [
-        "@mohak34/opencode-notifier@latest"
+        "@mohak34/opencode-notifier@latest",
+        "@plannotator/opencode@latest"
     ],
     "mcp": {
         "context7": {
