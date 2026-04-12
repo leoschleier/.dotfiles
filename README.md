@@ -84,9 +84,115 @@ Rustup and uv are installed via their official installers.
 
 ### LSP
 
-This config uses `mason-lspconfig` to automatically install all LSPs. Once installed,
-all language servers are being set up using `nvim-lspconfig`.
+This config uses `mason-lspconfig` to automatically install all LSP servers, and
+`vim.lsp.config()` / `vim.lsp.enable()` (Neovim 0.11+ native API) to configure them.
 
-### Copilot
+LSP keymaps rely on Neovim 0.11+ built-in defaults (`grr`, `grn`, `gra`, `gri`, `gd`,
+`gD`, `K`, `[d`/`]d`, `gO`).
 
-To setup GitHub Copilot with Neovim, use `:Copilot setup`.
+### Custom keymaps
+
+Leader key: `<Space>`
+
+#### General
+
+| Mode | Key | Action |
+| ---- | --- | ------ |
+| `i` | `<C-c>` | Exit insert mode |
+| `n` | `<leader>ex` | Open netrw explorer |
+| `n` | `<leader>nh` | Clear search highlight |
+| `n` | `x` | Delete char without yanking |
+| `n` | `<leader>+` / `<leader>-` | Increment / decrement number |
+| `n` | `<leader>r` | Search & replace word under cursor |
+| `x` | `<leader>p` | Paste without overwriting register |
+| `v` | `J` / `K` | Move selection down / up |
+
+#### Splits & tabs
+
+| Mode | Key | Action |
+| ---- | --- | ------ |
+| `n` | `<leader>sv` | Split vertically |
+| `n` | `<leader>sh` | Split horizontally |
+| `n` | `<leader>se` | Equalize splits |
+| `n` | `<leader>sx` | Close split |
+| `n` | `<leader>sm` | Maximize / minimize split |
+| `n` | `<leader>to` | New tab |
+| `n` | `<leader>tx` | Close tab |
+| `n` | `<leader>tn` / `<leader>tp` | Next / previous tab |
+
+#### LSP (buffer-local, on attach)
+
+| Mode | Key | Action |
+| ---- | --- | ------ |
+| `n` | `<leader>D` | Buffer diagnostics (Telescope) |
+| `n` | `<leader>d` | Line diagnostics (float) |
+| `n` | `<leader>rs` | Restart LSP |
+
+#### Telescope
+
+| Mode | Key | Action |
+| ---- | --- | ------ |
+| `n` | `<leader>ff` | Find files |
+| `n` | `<leader>fg` | Live grep |
+| `n` | `<leader>fb` | Buffers |
+| `n` | `<leader>fh` | Help tags |
+| `n` | `<leader>fF` | Find files (hidden) |
+| `n` | `<leader>fG` | Live grep (hidden) |
+
+#### Harpoon
+
+| Mode | Key | Action |
+| ---- | --- | ------ |
+| `n` | `<leader>ha` | Add file |
+| `n` | `<leader>hh` | Toggle quick menu |
+| `n` | `<leader>hj` / `hk` / `hl` / `h;` | Select slot 1–4 |
+
+#### Completion (nvim-cmp, insert mode)
+
+| Key | Action |
+| --- | ------ |
+| `<C-p>` / `<C-n>` | Previous / next item |
+| `<C-b>` / `<C-f>` | Scroll docs |
+| `<C-Space>` | Trigger completion |
+| `<C-y>` | Confirm |
+| `<C-Y>` | Confirm (replace) |
+| `<C-e>` | Abort |
+
+#### Git (Fugitive)
+
+| Mode | Key | Action |
+| ---- | --- | ------ |
+| `n` | `<leader>fu` | Open `:Git` |
+
+#### No Neck Pain
+
+| Mode | Key | Action |
+| ---- | --- | ------ |
+| `n` | `<leader>np` | Toggle centering |
+| `n` | `<leader>nql` / `<leader>nqr` | Toggle left / right side buffer |
+| `n` | `<leader>n=` / `<leader>n-` | Increase / decrease width |
+
+#### OpenCode
+
+| Mode | Key | Action |
+| ---- | --- | ------ |
+| `n,x` | `<leader>oa` | Ask opencode |
+| `n,x` | `<leader>ox` | Select opencode action |
+| `n,t` | `<leader>ot` | Toggle opencode |
+| `n,x` | `go` | Add range to opencode |
+| `n` | `goo` | Add line to opencode |
+| `n` | `<S-C-u>` / `<S-C-d>` | Scroll opencode up / down |
+
+#### 99
+
+| Mode | Key | Action |
+| ---- | --- | ------ |
+| `v` | `<leader>9v` | Send visual selection |
+| `n` | `<leader>9x` | Stop all requests |
+| `n` | `<leader>9s` | Search |
+
+#### Other
+
+| Mode | Key | Action |
+| ---- | --- | ------ |
+| `n` | `<leader>u` | Toggle undo tree |

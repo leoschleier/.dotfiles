@@ -45,12 +45,11 @@ return {
                 ["<C-e>"] = cmp.mapping.abort(), -- close completion window
             }),
             sources = cmp.config.sources({
-                { name = "copilot",    group_index = 2 },
-                { name = "supermaven", group_index = 2 },
-                { name = "nvim_lsp",   group_index = 2 },
-                { name = "luasnip",    group_index = 2 }, -- snippets
-                { name = "buffer",     group_index = 2 }, -- text within current buffer
-                { name = "path",       group_index = 2 }, -- file system paths
+                { name = "lazydev",  group_index = 0 }, -- skip loading LuaLS completions
+                { name = "nvim_lsp", group_index = 2 },
+                { name = "luasnip",  group_index = 2 }, -- snippets
+                { name = "buffer",   group_index = 2 }, -- text within current buffer
+                { name = "path",     group_index = 2 }, -- file system paths
             }),
         })
     end,
