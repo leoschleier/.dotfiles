@@ -43,7 +43,8 @@ Re-running `./install.sh` is safe — all scripts are idempotent.
 │   ├── macos/             # macOS-specific
 │   │   └── brew.sh        # Homebrew + packages + casks + rustup
 │   └── ubuntu/            # Ubuntu/WSL-specific
-│       ├── apt.sh         # apt packages + Neovim PPA
+│       ├── apt.sh         # apt packages + build deps
+│       ├── neovim.sh      # Neovim (built from source)
 │       ├── rustup.sh      # Rust toolchain
 │       └── uv.sh          # Python package manager
 ├── install.sh             # Main entry point (detects OS)
@@ -64,7 +65,8 @@ symlinks in `$HOME` matching the directory layout.
 
 ### Ubuntu / WSL (apt)
 
-neovim (via PPA), tmux, fzf, stow, ripgrep, fd-find, zsh, curl, git, build-essential
+neovim (built from source), tmux, fzf, stow, ripgrep, fd-find, zsh, curl, git, build-essential,
+ninja-build, gettext, cmake
 
 Rustup and uv are installed via their official installers.
 

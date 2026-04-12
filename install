@@ -23,6 +23,7 @@ Linux)
         exit 1
     fi
     "$SCRIPTS_DIR/apt.sh"
+    "$SCRIPTS_DIR/neovim.sh"
     "$SCRIPTS_DIR/rustup.sh"
     "$SCRIPTS_DIR/uv.sh"
     ;;
