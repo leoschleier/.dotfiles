@@ -9,7 +9,7 @@ Leo's .dotfiles.
 ```bash
 git clone git@github.com:leoschleier/.dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
-./install.sh
+./install
 ```
 
 ### Ubuntu (WSL)
@@ -17,10 +17,10 @@ cd ~/.dotfiles
 ```bash
 git clone git@github.com:leoschleier/.dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
-./install.sh
+./install
 ```
 
-Re-running `./install.sh` is safe — all scripts are idempotent.
+Re-running `./install` is safe — all scripts are idempotent.
 
 ## Structure
 
@@ -28,12 +28,16 @@ Re-running `./install.sh` is safe — all scripts are idempotent.
 .dotfiles/
 ├── home/                  # Stow package — mirrors $HOME layout
 │   ├── .zshenv            # ZDOTDIR bootstrap (sets zsh config to ~/.config/zsh/)
+│   ├── .local/
+│   │   └── bin/
+│   │       └── tmux-sessionizer
 │   └── .config/
 │       ├── aerospace/     # macOS tiling WM (ignored on Linux)
 │       ├── ghostty/       # macOS/Linux terminal (ignored on WSL)
 │       ├── nvim/
 │       ├── opencode/
 │       ├── tmux/
+│       ├── tmux-sessionizer/
 │       └── zsh/
 ├── scripts/
 │   ├── common/            # Portable install modules (all platforms)
@@ -41,13 +45,14 @@ Re-running `./install.sh` is safe — all scripts are idempotent.
 │   │   ├── stow.sh        # GNU Stow symlinks
 │   │   └── nvm.sh         # nvm + Node LTS
 │   ├── macos/             # macOS-specific
-│   │   └── brew.sh        # Homebrew + packages + casks + rustup
+│   │   └── brew.sh        # Homebrew + packages + casks + rustup + opencode
 │   └── ubuntu/            # Ubuntu/WSL-specific
 │       ├── apt.sh         # apt packages + build deps
 │       ├── neovim.sh      # Neovim (built from source)
+│       ├── opencode.sh    # opencode CLI
 │       ├── rustup.sh      # Rust toolchain
 │       └── uv.sh          # Python package manager
-├── install.sh             # Main entry point (detects OS)
+├── install                # Main entry point (detects OS)
 └── .vscode/               # VS Code reference configs (not stowed)
 ```
 
@@ -59,16 +64,16 @@ symlinks in `$HOME` matching the directory layout.
 
 ### macOS (Homebrew)
 
-| Packages                                         | Casks              |
-| ------------------------------------------------ | ------------------ |
-| neovim, tmux, fzf, stow, ripgrep, fd, uv, rustup | ghostty, aerospace |
+| Packages                                                    | Casks              |
+| ----------------------------------------------------------- | ------------------ |
+| neovim, tmux, fzf, stow, ripgrep, fd, uv, rustup, opencode | ghostty, aerospace |
 
 ### Ubuntu / WSL (apt)
 
 neovim (built from source), tmux, fzf, stow, ripgrep, fd-find, zsh, curl, git, build-essential,
 ninja-build, gettext, cmake
 
-Rustup and uv are installed via their official installers.
+Rustup, uv, and opencode are installed via their official installers.
 
 ### All platforms
 
@@ -78,7 +83,7 @@ Rustup and uv are installed via their official installers.
 ## Adding a new config
 
 1. Place the config file at `home/.config/<tool>/<file>` (mirroring the `$HOME` path).
-2. Run `stow --dir=~/.dotfiles --target=$HOME home` (or re-run `./install.sh`).
+2. Run `stow --dir=~/.dotfiles --target=$HOME home` (or re-run `./install`).
 
 ## Neovim
 
@@ -115,7 +120,6 @@ Leader key: `<Space>`
 | `n` | `<leader>sh` | Split horizontally |
 | `n` | `<leader>se` | Equalize splits |
 | `n` | `<leader>sx` | Close split |
-| `n` | `<leader>sm` | Maximize / minimize split |
 | `n` | `<leader>to` | New tab |
 | `n` | `<leader>tx` | Close tab |
 | `n` | `<leader>tn` / `<leader>tp` | Next / previous tab |
@@ -124,8 +128,12 @@ Leader key: `<Space>`
 
 | Mode | Key | Action |
 | ---- | --- | ------ |
-| `n` | `<leader>D` | Buffer diagnostics (Telescope) |
-| `n` | `<leader>d` | Line diagnostics (float) |
+| `n` | `gd` | Definitions (Telescope) |
+| `n` | `grr` | References (Telescope) |
+| `n` | `gri` | Implementations (Telescope) |
+| `n` | `grt` | Type definitions (Telescope) |
+| `n` | `grd` | Line diagnostics (float) |
+| `n` | `grD` | Buffer diagnostics (Telescope) |
 | `n` | `<leader>rs` | Restart LSP |
 
 #### Telescope
@@ -195,4 +203,5 @@ Leader key: `<Space>`
 
 | Mode | Key | Action |
 | ---- | --- | ------ |
+| `n` | `<leader>sm` | Maximize / minimize split (vim-maximizer) |
 | `n` | `<leader>u` | Toggle undo tree |
