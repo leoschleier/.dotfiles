@@ -82,6 +82,19 @@ plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
 
+# fzf shell integration (key bindings + completion)
+if command -v fzf &>/dev/null; then
+    # Homebrew (macOS)
+    if [[ -f "$HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.zsh" ]]; then
+        source "$HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.zsh"
+        source "$HOMEBREW_PREFIX/opt/fzf/shell/completion.zsh"
+    # apt (Ubuntu/Debian)
+    elif [[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ]]; then
+        source /usr/share/doc/fzf/examples/key-bindings.zsh
+        source /usr/share/doc/fzf/examples/completion.zsh
+    fi
+fi
+
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
