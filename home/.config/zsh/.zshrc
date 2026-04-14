@@ -115,6 +115,19 @@ export LESS="FRX"
 # tmux-sessionizer key bindings
 bindkey -s "^f" "tmux-sessionizer\n"
 
+# wt — shell wrapper to allow cd from the worktree manager
+wt() {
+    local output
+    output=$(command wt "$@")
+    local rc=$?
+    if [[ $rc -eq 0 && -n "$output" && -d "$output" ]]; then
+        cd "$output"
+    elif [[ -n "$output" ]]; then
+        echo "$output"
+    fi
+    return $rc
+}
+
 # nvm
 export NVM_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/nvm"
 [[ -s "$NVM_DIR/nvm.sh" ]] && . "$NVM_DIR/nvm.sh"

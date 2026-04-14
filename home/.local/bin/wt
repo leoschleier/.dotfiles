@@ -1,0 +1,366 @@
+#!/bin/bash
+set -euo pipefail
+
+VERSION="0.1.0"
+CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/wt"
+CONFIG_FILE="$CONFIG_DIR/wt.conf"
+
+# Defaults
+WT_COPY_FILES=()
+
+if [[ -f "$CONFIG_FILE" ]]; then
+    source "$CONFIG_FILE"
+fi
+
+# --- helpers ---
+
+err() { echo "$*" >&2; }
+
+die() {
+    err "$*"
+    exit 1
+}
+
+# Print a path to stdout for the shell wrapper to cd into.
+# All other output must go to stderr.
+emit_cd() { echo "$1"; }
+
+require_cmd() {
+    command -v "$1" &>/dev/null || die "$1 is not installed."
+}
+
+require_git_repo() {
+    git rev-parse --git-dir &>/dev/null || die "Not inside a git repository."
+}
+
+# Get the toplevel of the main worktree (the one git considers the "common" dir).
+main_worktree() {
+    git worktree list --porcelain | head -1 | sed 's/^worktree //'
+}
+
+# Get the toplevel of the current worktree.
+current_worktree() {
+    git rev-parse --show-toplevel
+}
+
+# Repo basename (e.g., "myapp" from ~/projects/myapp).
+repo_name() {
+    basename "$(main_worktree)"
+}
+
+# Compute the sibling worktree path for a given branch.
+# e.g., ~/projects/myapp + feat/auth -> ~/projects/myapp.feat-auth
+worktree_path_for_branch() {
+    local branch="$1"
+    local main
+    main="$(main_worktree)"
+    local parent
+    parent="$(dirname "$main")"
+    local name
+    name="$(repo_name)"
+    local safe_branch="${branch//\//-}"
+    echo "${parent}/${name}.${safe_branch}"
+}
+
+# Find the branch checked out in a given worktree path.
+branch_for_worktree() {
+    local wt_path="$1"
+    git worktree list --porcelain | awk -v p="$wt_path" '
+        /^worktree / { current = substr($0, 10) }
+        /^branch /   { if (current == p) { sub(/^branch refs\/heads\//, ""); print; exit } }
+    '
+}
+
+# --- subcommands ---
+
+cmd_switch() {
+    local branch=""
+    local create=false
+    local tmux_session=false
+
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+        -c | --create) create=true ;;
+        -t | --tmux) tmux_session=true ;;
+        -h | --help)
+            err "Usage: wt switch [-c] [-t] [branch]"
+            err ""
+            err "Switch to a worktree. Without arguments, opens fzf picker."
+            err ""
+            err "Options:"
+            err "  -c, --create   Create a new branch + worktree from current HEAD"
+            err "  -t, --tmux     Also create/switch a tmux session for the worktree"
+            return 0
+            ;;
+        -*) die "Unknown option: $1" ;;
+        *) branch="$1" ;;
+        esac
+        shift
+    done
+
+    require_git_repo
+
+    if [[ -z "$branch" ]]; then
+        require_cmd fzf
+        # Interactive picker: list worktrees (excluding current)
+        local current
+        current="$(current_worktree)"
+        local pick
+        pick=$(
+            git worktree list --porcelain | awk '
+                /^worktree / { wt = substr($0, 10) }
+                /^branch /   { br = substr($0, 8); sub(/refs\/heads\//, "", br); print br "\t" wt }
+            ' | grep -v "^[^\t]*\t${current}$" | column -t -s $'\t' | fzf --prompt="worktree> " --height=40%
+        ) || return 0
+        branch="$(echo "$pick" | awk '{print $1}')"
+    fi
+
+    if $create; then
+        local wt_path
+        wt_path="$(worktree_path_for_branch "$branch")"
+
+        if [[ -d "$wt_path" ]]; then
+            die "Worktree path already exists: $wt_path"
+        fi
+
+        err "Creating worktree for branch '$branch' at $wt_path"
+        git worktree add -b "$branch" "$wt_path" HEAD >&2
+
+        # Copy configured files from current worktree
+        if [[ ${#WT_COPY_FILES[@]} -gt 0 ]]; then
+            local current
+            current="$(current_worktree)"
+            for file in "${WT_COPY_FILES[@]}"; do
+                if [[ -f "$current/$file" ]]; then
+                    local dest_dir
+                    dest_dir="$(dirname "$wt_path/$file")"
+                    mkdir -p "$dest_dir"
+                    cp "$current/$file" "$wt_path/$file"
+                    err "Copied $file"
+                fi
+            done
+        fi
+
+        if $tmux_session; then
+            tmux_switch "$wt_path"
+        else
+            emit_cd "$wt_path"
+        fi
+    else
+        # Find existing worktree for this branch
+        local wt_path
+        wt_path=$(
+            git worktree list --porcelain | awk -v b="refs/heads/$branch" '
+                /^worktree / { wt = substr($0, 10) }
+                /^branch /   { if ($2 == b) { print wt; exit } }
+            '
+        )
+
+        if [[ -z "$wt_path" ]]; then
+            die "No worktree found for branch '$branch'. Use -c to create one."
+        fi
+
+        if $tmux_session; then
+            tmux_switch "$wt_path"
+        else
+            emit_cd "$wt_path"
+        fi
+    fi
+}
+
+cmd_list() {
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+        -h | --help)
+            err "Usage: wt list"
+            err ""
+            err "List all worktrees for the current repository."
+            return 0
+            ;;
+        *) die "Unknown argument: $1" ;;
+        esac
+    done
+
+    require_git_repo
+
+    local main
+    main="$(main_worktree)"
+    local current
+    current="$(current_worktree)"
+    local default_branch
+    default_branch="$(git -C "$main" symbolic-ref --short HEAD 2>/dev/null || echo "main")"
+
+    # Header
+    printf "  %-30s %-10s %-12s %s\n" "Branch" "Status" "${default_branch}±" "Path" >&2
+    printf "  %-30s %-10s %-12s %s\n" "------" "------" "-------" "----" >&2
+
+    git worktree list --porcelain | awk '
+        /^worktree / { wt = substr($0, 10) }
+        /^branch /   { br = substr($0, 8); sub(/refs\/heads\//, "", br); print br "\t" wt }
+        /^HEAD /     { }
+    ' | while IFS=$'\t' read -r branch wt_path; do
+        local marker=" "
+        if [[ "$wt_path" == "$current" ]]; then
+            marker="@"
+        elif [[ "$wt_path" == "$main" ]]; then
+            marker="^"
+        fi
+
+        # Dirty status
+        local status=""
+        local staged
+        staged=$(git -C "$wt_path" diff --cached --stat 2>/dev/null | tail -1)
+        local unstaged
+        unstaged=$(git -C "$wt_path" diff --stat 2>/dev/null | tail -1)
+        [[ -n "$staged" ]] && status+="+"
+        [[ -n "$unstaged" ]] && status+="*"
+        [[ -z "$status" ]] && status="-"
+
+        # Ahead/behind default branch
+        local ab=""
+        local ahead behind
+        ahead=$(git -C "$wt_path" rev-list --count "${default_branch}..HEAD" 2>/dev/null || echo "0")
+        behind=$(git -C "$wt_path" rev-list --count "HEAD..${default_branch}" 2>/dev/null || echo "0")
+        [[ "$ahead" -gt 0 ]] && ab+="↑${ahead}"
+        [[ "$behind" -gt 0 ]] && ab+=" ↓${behind}"
+        [[ -z "$ab" ]] && ab="="
+
+        printf "%s %-30s %-10s %-12s %s\n" "$marker" "$branch" "$status" "$ab" "$wt_path" >&2
+    done
+}
+
+cmd_remove() {
+    local branch=""
+    local force=false
+
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+        -f | --force) force=true ;;
+        -h | --help)
+            err "Usage: wt remove [-f] [branch]"
+            err ""
+            err "Remove a worktree and its branch."
+            err ""
+            err "Options:"
+            err "  -f, --force   Remove even if there are uncommitted changes"
+            return 0
+            ;;
+        -*) die "Unknown option: $1" ;;
+        *) branch="$1" ;;
+        esac
+        shift
+    done
+
+    require_git_repo
+
+    local current
+    current="$(current_worktree)"
+    local main
+    main="$(main_worktree)"
+
+    # Determine which worktree to remove
+    local wt_path
+    if [[ -z "$branch" ]]; then
+        # Remove the current worktree
+        if [[ "$current" == "$main" ]]; then
+            die "Cannot remove the main worktree."
+        fi
+        wt_path="$current"
+        branch="$(branch_for_worktree "$wt_path")"
+    else
+        wt_path="$(
+            git worktree list --porcelain | awk -v b="refs/heads/$branch" '
+                /^worktree / { wt = substr($0, 10) }
+                /^branch /   { if ($2 == b) { print wt; exit } }
+            '
+        )"
+        if [[ -z "$wt_path" ]]; then
+            die "No worktree found for branch '$branch'."
+        fi
+        if [[ "$wt_path" == "$main" ]]; then
+            die "Cannot remove the main worktree."
+        fi
+    fi
+
+    # Safety check: uncommitted changes
+    if ! $force; then
+        local dirty
+        dirty=$(git -C "$wt_path" status --porcelain 2>/dev/null)
+        if [[ -n "$dirty" ]]; then
+            die "Worktree '$branch' has uncommitted changes. Use -f to force removal."
+        fi
+    fi
+
+    err "Removing worktree '$branch' at $wt_path"
+
+    local force_flag=""
+    $force && force_flag="--force"
+
+    git worktree remove $force_flag "$wt_path" >&2
+    git branch -d "$branch" 2>/dev/null >&2 || git branch -D "$branch" 2>/dev/null >&2 || true
+    err "Removed worktree and branch '$branch'."
+
+    # If we removed the current worktree, cd to main
+    if [[ "$wt_path" == "$current" ]]; then
+        emit_cd "$main"
+    fi
+}
+
+# --- tmux integration ---
+
+tmux_switch() {
+    local wt_path="$1"
+    require_cmd tmux
+
+    local session_name
+    session_name="$(basename "$wt_path" | tr . _)"
+
+    # Create session if it doesn't exist
+    if ! tmux has-session -t="$session_name" 2>/dev/null; then
+        tmux new-session -ds "$session_name" -c "$wt_path" >&2
+    fi
+
+    # Attach or switch
+    if [[ -z "${TMUX:-}" ]]; then
+        tmux attach-session -t "$session_name" >&2
+    else
+        tmux switch-client -t "$session_name" >&2
+    fi
+}
+
+# --- main ---
+
+cmd_help() {
+    err "wt $VERSION — minimal git worktree manager"
+    err ""
+    err "Usage: wt <command> [options]"
+    err ""
+    err "Commands:"
+    err "  switch [-c] [-t] [branch]    Switch to (or create) a worktree"
+    err "  list                         List worktrees for the current repo"
+    err "  remove [-f] [branch]         Remove a worktree and its branch"
+    err ""
+    err "Options:"
+    err "  -h, --help       Show help"
+    err "  -v, --version    Show version"
+    err ""
+    err "Config: $CONFIG_FILE"
+}
+
+case "${1:-}" in
+switch)
+    shift
+    cmd_switch "$@"
+    ;;
+list | ls)
+    shift
+    cmd_list "$@"
+    ;;
+remove | rm)
+    shift
+    cmd_remove "$@"
+    ;;
+-v | --version) err "wt $VERSION" ;;
+-h | --help | "") cmd_help ;;
+*) die "Unknown command: $1. Run 'wt --help' for usage." ;;
+esac
