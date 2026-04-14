@@ -43,5 +43,5 @@ return {
                 scratchPad = "false",
             },
         })
-    end
+    end,
 }

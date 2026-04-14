@@ -28,6 +28,10 @@ keymap.set("n", "<leader>tp", ":tabp<CR>") -- Go to previous tab
 keymap.set("v", "J", ":m '>+1<CR>gv=gv") -- Move line/block down
 keymap.set("v", "K", ":m '<-2<CR>gv=gv") -- Move line/block up
 
-keymap.set("x", "<leader>p", "\"_dP") -- Paste without removing from register 
+keymap.set("x", "<leader>p", '"_dP') -- Paste without removing from register
 
-keymap.set("n", "<leader>r", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>") -- Global replace for current string
+keymap.set(
+    "n",
+    "<leader>r",
+    ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>"
+) -- Global replace for current string

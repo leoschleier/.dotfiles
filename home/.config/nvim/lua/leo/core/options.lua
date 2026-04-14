@@ -45,5 +45,3 @@ opt.iskeyword:append("-")
 
 -- Time that Vim waits after typing before triggering a plugin
 opt.updatetime = 50 -- ms (Default: 4000 ms)
-
-
