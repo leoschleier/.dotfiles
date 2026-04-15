@@ -125,6 +125,14 @@ fi
 # Configure pager used by git
 export LESS="FRX"
 
+# nvm
+export NVM_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/nvm"
+[[ -s "$NVM_DIR/nvm.sh" ]] && . "$NVM_DIR/nvm.sh"
+[[ -s "$NVM_DIR/bash_completion" ]] && . "$NVM_DIR/bash_completion"
+
+# opencode
+export PATH=/home/bho36/.opencode/bin:$PATH
+
 # tmux-sessionizer key bindings
 bindkey -s "^f" "tmux-sessionizer\n"
 
@@ -140,8 +148,3 @@ wt() {
     fi
     return $rc
 }
-
-# nvm
-export NVM_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/nvm"
-[[ -s "$NVM_DIR/nvm.sh" ]] && . "$NVM_DIR/nvm.sh"
-[[ -s "$NVM_DIR/bash_completion" ]] && . "$NVM_DIR/bash_completion"

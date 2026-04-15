@@ -19,6 +19,7 @@ PACKAGES=(
     fd
     uv
     rustup
+    anomalyco/tap/opencode
 )
 
 CASKS=(

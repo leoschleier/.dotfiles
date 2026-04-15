@@ -26,6 +26,7 @@ Linux)
     "$SCRIPTS_DIR/neovim.sh"
     "$SCRIPTS_DIR/rustup.sh"
     "$SCRIPTS_DIR/uv.sh"
+    "$SCRIPTS_DIR/opencode.sh"
     ;;
 *)
     echo "Unsupported OS: $(uname -s)"
