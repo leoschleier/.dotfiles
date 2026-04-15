@@ -71,6 +71,37 @@ branch_for_worktree() {
     '
 }
 
+fetch_remotes() {
+    err "Fetching remotes..."
+    git fetch --all --prune >&2
+}
+
+# Given a branch name, return matching remote tracking refs (e.g., "origin/feat").
+# One line per match. Excludes HEAD refs.
+find_remote_branches() {
+    local branch="$1"
+    git for-each-ref --format='%(refname:strip=2)' "refs/remotes/*/${branch}" \
+        | grep -v '/HEAD$' || true
+}
+
+# Copy configured WT_COPY_FILES from the current worktree into a new worktree.
+copy_worktree_files() {
+    local wt_path="$1"
+    if [[ ${#WT_COPY_FILES[@]} -gt 0 ]]; then
+        local src
+        src="$(current_worktree)"
+        for file in "${WT_COPY_FILES[@]}"; do
+            if [[ -f "$src/$file" ]]; then
+                local dest_dir
+                dest_dir="$(dirname "$wt_path/$file")"
+                mkdir -p "$dest_dir"
+                cp "$src/$file" "$wt_path/$file"
+                err "Copied $file"
+            fi
+        done
+    fi
+}
+
 # --- subcommands ---
 
 cmd_switch() {
@@ -102,17 +133,64 @@ cmd_switch() {
 
     if [[ -z "$branch" ]]; then
         require_cmd fzf
-        # Interactive picker: list worktrees (excluding current)
         local current
         current="$(current_worktree)"
-        local pick
-        pick=$(
+
+        fetch_remotes
+
+        # Collect existing worktree entries (excluding current)
+        local wt_entries
+        wt_entries=$(
             git worktree list --porcelain | awk '
                 /^worktree / { wt = substr($0, 10) }
-                /^branch /   { br = substr($0, 8); sub(/refs\/heads\//, "", br); print br "\t" wt }
-            ' | grep -v "^[^\t]*\t${current}$" | column -t -s $'\t' | fzf --prompt="worktree> " --height=40%
-        ) || return 0
+                /^branch /   { br = substr($0, 8); sub(/refs\/heads\//, "", br); print br "\t" wt "\tworktree" }
+            ' | grep -v "^[^\t]*\t${current}\t" || true
+        )
+
+        # Collect existing worktree branch names for deduplication
+        local -a wt_branches
+        if [[ -n "$wt_entries" ]]; then
+            mapfile -t wt_branches < <(echo "$wt_entries" | cut -f1)
+        fi
+
+        # Collect remote branches not already represented by a worktree
+        local remote_entries=""
+        while IFS= read -r ref; do
+            [[ -z "$ref" ]] && continue
+            # ref is e.g. "origin/feat-auth" — extract branch name after first /
+            local rbranch="${ref#*/}"
+            # Skip if a worktree already exists for this branch
+            local dup=false
+            for wb in "${wt_branches[@]+"${wt_branches[@]}"}"; do
+                if [[ "$wb" == "$rbranch" ]]; then
+                    dup=true
+                    break
+                fi
+            done
+            $dup && continue
+            remote_entries+="${ref}"$'\t\t'"remote"$'\n'
+        done < <(git for-each-ref --format='%(refname:strip=2)' refs/remotes/ | grep -v '/HEAD$' || true)
+
+        # Combine and pick
+        local combined
+        combined=$(printf '%s\n%s' "$wt_entries" "$remote_entries" | grep -v '^$' || true)
+
+        if [[ -z "$combined" ]]; then
+            die "No other worktrees or remote branches found."
+        fi
+
+        local pick
+        pick=$(echo "$combined" | column -t -s $'\t' | fzf --prompt="worktree> " --height=40%) || return 0
+
+        # Parse selection: last word is "worktree" or "remote"
+        local pick_type
+        pick_type="$(echo "$pick" | awk '{print $NF}')"
         branch="$(echo "$pick" | awk '{print $1}')"
+
+        if [[ "$pick_type" == "remote" ]]; then
+            # Selected a remote ref like "origin/feat" — extract branch name
+            branch="${branch#*/}"
+        fi
     fi
 
     if $create; then
@@ -126,20 +204,12 @@ cmd_switch() {
         err "Creating worktree for branch '$branch' at $wt_path"
         git worktree add -b "$branch" "$wt_path" HEAD >&2
 
-        # Copy configured files from current worktree
-        if [[ ${#WT_COPY_FILES[@]} -gt 0 ]]; then
-            local current
-            current="$(current_worktree)"
-            for file in "${WT_COPY_FILES[@]}"; do
-                if [[ -f "$current/$file" ]]; then
-                    local dest_dir
-                    dest_dir="$(dirname "$wt_path/$file")"
-                    mkdir -p "$dest_dir"
-                    cp "$current/$file" "$wt_path/$file"
-                    err "Copied $file"
-                fi
-            done
-        fi
+        # Safety: unset upstream on the new branch to prevent accidental pushes
+        # to the base branch's remote (e.g., pushing to main instead of the
+        # new feature branch).
+        git -C "$wt_path" branch --unset-upstream "$branch" 2>/dev/null || true
+
+        copy_worktree_files "$wt_path"
 
         if $tmux_session; then
             tmux_switch "$wt_path"
@@ -156,9 +226,61 @@ cmd_switch() {
             '
         )
 
-        if [[ -z "$wt_path" ]]; then
-            die "No worktree found for branch '$branch'. Use -c to create one."
+        if [[ -n "$wt_path" ]]; then
+            # Existing worktree found — switch to it
+            if $tmux_session; then
+                tmux_switch "$wt_path"
+            else
+                emit_cd "$wt_path"
+            fi
+            return 0
         fi
+
+        # No existing worktree. Check if local branch exists.
+        if git show-ref --verify --quiet "refs/heads/$branch"; then
+            # Local branch exists but has no worktree — create one
+            wt_path="$(worktree_path_for_branch "$branch")"
+            err "Creating worktree for local branch '$branch' at $wt_path"
+            git worktree add "$wt_path" "$branch" >&2
+            copy_worktree_files "$wt_path"
+            if $tmux_session; then
+                tmux_switch "$wt_path"
+            else
+                emit_cd "$wt_path"
+            fi
+            return 0
+        fi
+
+        # No local branch — look for remote tracking branches
+        fetch_remotes
+
+        local -a remotes
+        mapfile -t remotes < <(find_remote_branches "$branch")
+        # Guard against mapfile producing a single empty element
+        if [[ ${#remotes[@]} -eq 1 && -z "${remotes[0]:-}" ]]; then
+            remotes=()
+        fi
+
+        if [[ ${#remotes[@]} -eq 0 ]]; then
+            die "No local or remote branch '$branch' found."
+        fi
+
+        local remote_ref
+        if [[ ${#remotes[@]} -eq 1 ]]; then
+            remote_ref="${remotes[0]}"
+            err "Found remote branch: $remote_ref"
+        else
+            # Ambiguous — multiple remotes have this branch
+            require_cmd fzf
+            err "Branch '$branch' exists on multiple remotes:"
+            remote_ref=$(printf '%s\n' "${remotes[@]}" \
+                | fzf --prompt="select remote> " --height=40%) || return 0
+        fi
+
+        wt_path="$(worktree_path_for_branch "$branch")"
+        err "Creating worktree for '$branch' tracking '$remote_ref' at $wt_path"
+        git worktree add -b "$branch" "$wt_path" "$remote_ref" >&2
+        copy_worktree_files "$wt_path"
 
         if $tmux_session; then
             tmux_switch "$wt_path"
