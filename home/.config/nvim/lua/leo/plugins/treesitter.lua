@@ -1,9 +1,11 @@
 return {
     "nvim-treesitter/nvim-treesitter",
+    branch = "master",
     build = ":TSUpdate",
     dependencies = {
         { "windwp/nvim-ts-autotag", opts = {} },
     },
+    main = "nvim-treesitter.configs",
     opts = {
         ensure_installed = {
             "c",
