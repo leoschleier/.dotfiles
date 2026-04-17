@@ -122,6 +122,8 @@ fi
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 #
 
+alias note="nvim '${NOTE_DIR:-$HOME}'"
+
 # Configure pager used by git
 export LESS="FRX"
 
