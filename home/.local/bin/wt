@@ -71,11 +71,6 @@ branch_for_worktree() {
     '
 }
 
-fetch_remotes() {
-    err "Fetching remotes..."
-    git fetch --all --prune >&2
-}
-
 # Given a branch name, return matching remote tracking refs (e.g., "origin/feat").
 # One line per match. Excludes HEAD refs.
 find_remote_branches() {
@@ -135,8 +130,6 @@ cmd_switch() {
         require_cmd fzf
         local current
         current="$(current_worktree)"
-
-        fetch_remotes
 
         # Collect existing worktree entries (excluding current)
         local wt_entries
@@ -252,8 +245,6 @@ cmd_switch() {
         fi
 
         # No local branch — look for remote tracking branches
-        fetch_remotes
-
         local -a remotes
         mapfile -t remotes < <(find_remote_branches "$branch")
         # Guard against mapfile producing a single empty element
