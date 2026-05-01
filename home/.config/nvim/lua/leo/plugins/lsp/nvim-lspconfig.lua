@@ -62,9 +62,6 @@ return {
                     "<cmd>Telescope diagnostics bufnr=0<CR>",
                     opts
                 )
-
-                opts.desc = "Restart LSP"
-                vim.keymap.set("n", "<leader>rs", "<cmd>LspRestart<CR>", opts)
             end,
         })
 
