@@ -5,18 +5,19 @@ echo "Updating apt package lists..."
 sudo apt-get update
 
 PACKAGES=(
-    tmux
-    fzf
-    stow
-    ripgrep
-    fd-find
-    zsh
-    curl
-    git
     build-essential
-    ninja-build
-    gettext
     cmake
+    curl
+    fd-find
+    fzf
+    gettext
+    git
+    ninja-build
+    ripgrep
+    stow
+    tmux
+    tree-sitter-cli
+    zsh
 )
 
 echo "Installing apt packages..."

@@ -11,20 +11,23 @@ fi
 eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null || true)"
 
 PACKAGES=(
-    neovim
-    tmux
-    fzf
-    stow
-    ripgrep
-    fd
-    uv
-    rustup
     anomalyco/tap/opencode
+    fd
+    fzf
+    neovim
+    ripgrep
+    rustup
+    stow
+    tmux
+    tree-sitter-cli
+    uv
 )
 
 CASKS=(
     ghostty
     nikitabobko/tap/aerospace
+    obsidian
+    zen-browser
 )
 
 echo "Installing Homebrew packages..."
