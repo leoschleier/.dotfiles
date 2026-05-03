@@ -4,15 +4,6 @@ return {
     lazy = false,
     build = ":TSUpdate",
     main = "nvim-treesitter",
-    init = function()
-        vim.api.nvim_create_autocmd("FileType", {
-            callback = function(args)
-                pcall(vim.treesitter.start, args.buf) -- highlighting
-                vim.bo[args.buf].indentexpr =
-                    "v:lua.vim.treesitter.indentexpr()" -- indentation
-            end,
-        })
-    end,
     config = function()
         local parsers = {
             "c",
@@ -32,5 +23,12 @@ return {
             "yaml",
         }
         require("nvim-treesitter").install(parsers)
+        vim.api.nvim_create_autocmd("FileType", {
+            callback = function(args)
+                pcall(vim.treesitter.start, args.buf) -- highlighting
+                vim.bo[args.buf].indentexpr =
+                    "v:lua.require'nvim-treesitter'.indentexpr()" -- indentation
+            end,
+        })
     end,
 }
