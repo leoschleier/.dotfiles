@@ -1,0 +1,3 @@
+[ui]
+default-command = "log"
+editor = "nvim"

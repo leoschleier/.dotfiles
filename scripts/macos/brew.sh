@@ -14,6 +14,7 @@ PACKAGES=(
     anomalyco/tap/opencode
     fd
     fzf
+    jj
     neovim
     ripgrep
     rustup
