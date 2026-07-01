@@ -150,3 +150,16 @@ wt() {
     fi
     return $rc
 }
+
+# ws — shell wrapper to allow cd from the jj workspace manager
+ws() {
+    local output
+    output=$(command ws "$@")
+    local rc=$?
+    if [[ $rc -eq 0 && -n "$output" && -d "$output" ]]; then
+        cd "$output"
+    elif [[ -n "$output" ]]; then
+        echo "$output"
+    fi
+    return $rc
+}

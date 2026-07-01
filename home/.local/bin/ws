@@ -1,0 +1,359 @@
+#!/bin/bash
+set -euo pipefail
+
+VERSION="0.1.0"
+CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/ws"
+CONFIG_FILE="$CONFIG_DIR/ws.conf"
+
+# Defaults
+WS_COPY_FILES=()
+
+if [[ -f "$CONFIG_FILE" ]]; then
+    source "$CONFIG_FILE"
+fi
+
+# --- helpers ---
+
+err() { echo "$*" >&2; }
+
+die() {
+    err "$*"
+    exit 1
+}
+
+# Print a path to stdout for the shell wrapper to cd into.
+# All other output must go to stderr.
+emit_cd() { echo "$1"; }
+
+require_cmd() {
+    command -v "$1" &>/dev/null || die "$1 is not installed."
+}
+
+require_jj_repo() {
+    jj root &>/dev/null || die "Not inside a jj repository."
+}
+
+# Get the root of the default workspace.
+default_workspace_root() {
+    jj workspace root --name default 2>/dev/null \
+        || jj workspace list -T 'if(name == "default", root)' 2>/dev/null | head -1
+}
+
+# Get the root of the current workspace.
+current_workspace_root() {
+    jj workspace root
+}
+
+# Get the name of the current workspace.
+current_workspace_name() {
+    local current
+    current="$(current_workspace_root)"
+    jj workspace list -T 'name ++ "\t" ++ root ++ "\n"' 2>/dev/null \
+        | awk -F'\t' -v p="$current" '$2 == p { print $1; exit }'
+}
+
+# Repo basename (e.g., "myapp" from ~/projects/myapp).
+repo_name() {
+    basename "$(default_workspace_root)"
+}
+
+# Compute the sibling workspace path for a given name.
+# e.g., ~/projects/myapp + feature -> ~/projects/myapp.feature
+workspace_path_for_name() {
+    local name="$1"
+    local default_root
+    default_root="$(default_workspace_root)"
+    local parent
+    parent="$(dirname "$default_root")"
+    local rname
+    rname="$(repo_name)"
+    echo "${parent}/${rname}.${name}"
+}
+
+# Look up an existing workspace's root by name.
+workspace_root_by_name() {
+    local name="$1"
+    jj workspace root --name "$name" 2>/dev/null \
+        || jj workspace list -T 'if(name == "'"$name"'", root)' 2>/dev/null | head -1
+}
+
+# Copy configured WS_COPY_FILES from the current workspace into a new workspace.
+copy_workspace_files() {
+    local ws_path="$1"
+    if [[ ${#WS_COPY_FILES[@]} -gt 0 ]]; then
+        local src
+        src="$(current_workspace_root)"
+        for file in "${WS_COPY_FILES[@]}"; do
+            if [[ -f "$src/$file" ]]; then
+                local dest_dir
+                dest_dir="$(dirname "$ws_path/$file")"
+                mkdir -p "$dest_dir"
+                cp "$src/$file" "$ws_path/$file"
+                err "Copied $file"
+            fi
+        done
+    fi
+}
+
+# --- subcommands ---
+
+cmd_switch() {
+    local name=""
+    local create=false
+    local tmux_session=false
+
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+        -c | --create) create=true ;;
+        -t | --tmux) tmux_session=true ;;
+        -h | --help)
+            err "Usage: ws switch [-c] [-t] [name]"
+            err ""
+            err "Switch to a workspace. Without arguments, opens fzf picker."
+            err ""
+            err "Options:"
+            err "  -c, --create   Create a new workspace with an empty change"
+            err "  -t, --tmux     Also create/switch a tmux session for the workspace"
+            return 0
+            ;;
+        -*) die "Unknown option: $1" ;;
+        *) name="$1" ;;
+        esac
+        shift
+    done
+
+    require_jj_repo
+
+    if [[ -z "$name" ]] && $create; then
+        die "Workspace name is required when using --create."
+    fi
+
+    if [[ -z "$name" ]]; then
+        # Interactive picker
+        require_cmd fzf
+        local current
+        current="$(current_workspace_root)"
+
+        local entries
+        entries=$(
+            jj workspace list -T 'name ++ "\t" ++ root ++ "\n"' 2>/dev/null \
+                | awk -F'\t' -v p="$current" '$2 != p && $1 != "" { print $1 "\t" $2 }'
+        )
+
+        if [[ -z "$entries" ]]; then
+            die "No other workspaces found."
+        fi
+
+        local pick
+        pick=$(echo "$entries" | column -t -s $'\t' | fzf --prompt="workspace> " --height=40%) || return 0
+
+        name="$(echo "$pick" | awk '{print $1}')"
+    fi
+
+    if $create; then
+        local ws_path
+        ws_path="$(workspace_path_for_name "$name")"
+
+        if [[ -d "$ws_path" ]]; then
+            die "Workspace path already exists: $ws_path"
+        fi
+
+        err "Creating workspace '$name' at $ws_path"
+        jj workspace add "$ws_path" --name "$name" >&2
+
+        copy_workspace_files "$ws_path"
+
+        if $tmux_session; then
+            tmux_switch "$ws_path"
+        else
+            emit_cd "$ws_path"
+        fi
+    else
+        local ws_path
+        ws_path="$(workspace_root_by_name "$name")"
+
+        if [[ -z "$ws_path" ]]; then
+            die "No workspace found with name '$name'."
+        fi
+
+        if $tmux_session; then
+            tmux_switch "$ws_path"
+        else
+            emit_cd "$ws_path"
+        fi
+    fi
+}
+
+cmd_list() {
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+        -h | --help)
+            err "Usage: ws list"
+            err ""
+            err "List all workspaces for the current repository."
+            return 0
+            ;;
+        *) die "Unknown argument: $1" ;;
+        esac
+    done
+
+    require_jj_repo
+
+    local current
+    current="$(current_workspace_root)"
+
+    # Header
+    printf "  %-20s %s\n" "Name" "Path" >&2
+    printf "  %-20s %s\n" "----" "----" >&2
+
+    jj workspace list -T 'name ++ "\t" ++ root ++ "\n"' 2>/dev/null \
+        | while IFS=$'\t' read -r ws_name ws_path; do
+            [[ -z "$ws_name" ]] && continue
+            local marker=" "
+            if [[ "$ws_path" == "$current" ]]; then
+                marker="@"
+            fi
+            printf "%s %-20s %s\n" "$marker" "$ws_name" "$ws_path" >&2
+        done
+}
+
+cmd_remove() {
+    local name=""
+    local force=false
+
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+        -f | --force) force=true ;;
+        -h | --help)
+            err "Usage: ws remove [-f] [name]"
+            err ""
+            err "Remove a workspace and delete its directory."
+            err ""
+            err "Options:"
+            err "  -f, --force   Remove without warning about orphaned changes"
+            return 0
+            ;;
+        -*) die "Unknown option: $1" ;;
+        *) name="$1" ;;
+        esac
+        shift
+    done
+
+    require_jj_repo
+
+    local current_root
+    current_root="$(current_workspace_root)"
+    local default_root
+    default_root="$(default_workspace_root)"
+
+    # Determine which workspace to remove
+    local ws_path
+    if [[ -z "$name" ]]; then
+        # Remove the current workspace
+        name="$(current_workspace_name)"
+        ws_path="$current_root"
+    else
+        ws_path="$(workspace_root_by_name "$name")"
+        if [[ -z "$ws_path" ]]; then
+            die "No workspace found with name '$name'."
+        fi
+    fi
+
+    if [[ "$name" == "default" ]]; then
+        die "Cannot remove the default workspace."
+    fi
+
+    # Safety check: warn about orphaned changes
+    if ! $force; then
+        local change_info
+        change_info=$(
+            jj workspace list \
+                -T 'if(name == "'"$name"'", self.target().change_id().shortest(8) ++ " " ++ self.target().description().first_line() ++ "\n")' \
+                2>/dev/null | tr -s '[:space:]' | sed 's/^ //' || true
+        )
+        if [[ -n "$change_info" ]]; then
+            local change_id change_desc
+            change_id="$(echo "$change_info" | awk '{print $1}')"
+            change_desc="$(echo "$change_info" | cut -d' ' -f2-)"
+            if [[ -n "$change_desc" ]]; then
+                die "Workspace '$name' has working copy change: $change_id \"$change_desc\""$'\n'"This change will become hidden after removal. Use -f to force."
+            fi
+        fi
+    fi
+
+    err "Removing workspace '$name' at $ws_path"
+
+    jj workspace forget "$name" >&2
+
+    # Validate the path contains .jj before deleting
+    if [[ -d "$ws_path/.jj" ]]; then
+        rm -rf "$ws_path"
+        err "Removed workspace '$name' and deleted $ws_path."
+    else
+        err "Forgot workspace '$name'. Directory $ws_path does not appear to be a jj workspace; skipping deletion."
+    fi
+
+    # If we removed the current workspace, cd to default
+    if [[ "$ws_path" == "$current_root" ]]; then
+        emit_cd "$default_root"
+    fi
+}
+
+# --- tmux integration ---
+
+tmux_switch() {
+    local ws_path="$1"
+    require_cmd tmux
+
+    local session_name
+    session_name="$(basename "$ws_path" | tr . _)"
+
+    # Create session if it doesn't exist
+    if ! tmux has-session -t="$session_name" 2>/dev/null; then
+        tmux new-session -ds "$session_name" -c "$ws_path" >&2
+    fi
+
+    # Attach or switch
+    if [[ -z "${TMUX:-}" ]]; then
+        tmux attach-session -t "$session_name" >&2
+    else
+        tmux switch-client -t "$session_name" >&2
+    fi
+}
+
+# --- main ---
+
+cmd_help() {
+    err "ws $VERSION — minimal jj workspace manager"
+    err ""
+    err "Usage: ws <command> [options]"
+    err ""
+    err "Commands:"
+    err "  switch [-c] [-t] [name]    Switch to (or create) a workspace"
+    err "  list                       List workspaces for the current repo"
+    err "  remove [-f] [name]         Remove a workspace and its directory"
+    err ""
+    err "Options:"
+    err "  -h, --help       Show help"
+    err "  -v, --version    Show version"
+    err ""
+    err "Config: $CONFIG_FILE"
+}
+
+case "${1:-}" in
+switch)
+    shift
+    cmd_switch "$@"
+    ;;
+list | ls)
+    shift
+    cmd_list "$@"
+    ;;
+remove | rm)
+    shift
+    cmd_remove "$@"
+    ;;
+-v | --version) err "ws $VERSION" ;;
+-h | --help | "") cmd_help ;;
+*) die "Unknown command: $1. Run 'ws --help' for usage." ;;
+esac
