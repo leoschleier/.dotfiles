@@ -5,3 +5,4 @@ home/.config/zsh/.zcompdump
 
 # Jujutsu
 .jj/
+home/.config/jj/repos
