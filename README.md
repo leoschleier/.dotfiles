@@ -131,14 +131,20 @@ Leader key: `<Space>`
 
 #### LSP (buffer-local, on attach)
 
-| Mode | Key   | Action                         |
-| ---- | ----- | ------------------------------ |
-| `n`  | `gd`  | Definitions (Telescope)        |
-| `n`  | `grr` | References (Telescope)         |
-| `n`  | `gri` | Implementations (Telescope)    |
-| `n`  | `grt` | Type definitions (Telescope)   |
-| `n`  | `grd` | Line diagnostics (float)       |
-| `n`  | `grD` | Buffer diagnostics (Telescope) |
+| Mode  | Key         | Action                         |
+| ----- | ----------- | ------------------------------ |
+| `n`   | `gd`        | Definitions (Telescope)        |
+| `n`   | `grr`       | References (Telescope)         |
+| `n`   | `gri`       | Implementations (Telescope)    |
+| `n`   | `grt`       | Type definitions (Telescope)   |
+| `n,v` | `gra`       | Code actions (quick-fixes)     |
+| `n`   | `grn`       | Rename symbol                  |
+| `n`   | `gO`        | Document symbols               |
+| `n`   | `K`         | Hover documentation            |
+| `n`   | `[d` / `]d` | Previous / next diagnostic     |
+| `n`   | `grd`       | Line diagnostics (float)       |
+| `n`   | `grD`       | Buffer diagnostics (Telescope) |
+| `i`   | `<C-S>`     | Signature help                 |
 
 #### Telescope
 
