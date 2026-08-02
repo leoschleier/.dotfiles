@@ -12,6 +12,14 @@ cd ~/.dotfiles
 ./install
 ```
 
+### Arch Linux
+
+```bash
+git clone git@github.com:leoschleier/.dotfiles.git ~/.dotfiles
+cd ~/.dotfiles
+./install
+```
+
 ### Ubuntu (WSL)
 
 ```bash
@@ -45,6 +53,8 @@ Re-running `./install` is safe — all scripts are idempotent.
 │       ├── wt/
 │       └── zsh/
 ├── scripts/
+│   ├── arch/              # Arch Linux-specific
+│   │   └── pacman.sh      # pacman packages + rustup init
 │   ├── common/            # Portable install modules (all platforms)
 │   │   ├── oh-my-zsh.sh
 │   │   ├── stow.sh        # GNU Stow symlinks
@@ -72,6 +82,12 @@ symlinks in `$HOME` matching the directory layout.
 | Packages                                                                        | Casks                                     |
 | ------------------------------------------------------------------------------- | ----------------------------------------- |
 | neovim, tmux, fzf, stow, ripgrep, fd, uv, rustup, jj, tree-sitter-cli, opencode | ghostty, aerospace, obsidian, zen-browser |
+
+### Arch Linux (pacman)
+
+neovim, tmux, fzf, stow, ripgrep, fd, zsh, curl, git, gcc, tree-sitter-cli, uv, rustup,
+jujutsu, opencode — plus GUI apps ghostty, obsidian, firefox. All from official repos
+(no AUR).
 
 ### Ubuntu / WSL (apt)
 

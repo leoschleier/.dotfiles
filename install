@@ -16,17 +16,20 @@ Darwin)
     ;;
 Linux)
     echo "Detected Linux"
-    if command -v apt-get &>/dev/null; then
+    if command -v pacman &>/dev/null; then
+        SCRIPTS_DIR="$DOTFILES_DIR/scripts/arch"
+        "$SCRIPTS_DIR/pacman.sh"
+    elif command -v apt-get &>/dev/null; then
         SCRIPTS_DIR="$DOTFILES_DIR/scripts/ubuntu"
+        "$SCRIPTS_DIR/apt.sh"
+        "$SCRIPTS_DIR/neovim.sh"
+        "$SCRIPTS_DIR/rustup.sh"
+        "$SCRIPTS_DIR/uv.sh"
+        "$SCRIPTS_DIR/opencode.sh"
     else
-        echo "Unsupported Linux distribution (no apt-get found)."
+        echo "Unsupported Linux distribution (no pacman or apt-get found)."
         exit 1
     fi
-    "$SCRIPTS_DIR/apt.sh"
-    "$SCRIPTS_DIR/neovim.sh"
-    "$SCRIPTS_DIR/rustup.sh"
-    "$SCRIPTS_DIR/uv.sh"
-    "$SCRIPTS_DIR/opencode.sh"
     ;;
 *)
     echo "Unsupported OS: $(uname -s)"
