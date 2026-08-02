@@ -30,14 +30,19 @@ Re-running `./install` is safe — all scripts are idempotent.
 │   ├── .zshenv            # ZDOTDIR bootstrap (sets zsh config to ~/.config/zsh/)
 │   ├── .local/
 │   │   └── bin/
-│   │       └── tmux-sessionizer
+│   │       ├── tmux-sessionizer
+│   │       ├── ws
+│   │       └── wt
 │   └── .config/
 │       ├── aerospace/     # macOS tiling WM (ignored on Linux)
 │       ├── ghostty/       # macOS/Linux terminal (ignored on WSL)
+│       ├── jj/            # Jujutsu VCS
 │       ├── nvim/
 │       ├── opencode/
 │       ├── tmux/
 │       ├── tmux-sessionizer/
+│       ├── ws/
+│       ├── wt/
 │       └── zsh/
 ├── scripts/
 │   ├── common/            # Portable install modules (all platforms)
@@ -64,14 +69,14 @@ symlinks in `$HOME` matching the directory layout.
 
 ### macOS (Homebrew)
 
-| Packages                                                    | Casks              |
-| ----------------------------------------------------------- | ------------------ |
-| neovim, tmux, fzf, stow, ripgrep, fd, uv, rustup, opencode | ghostty, aerospace |
+| Packages                                                                        | Casks                                     |
+| ------------------------------------------------------------------------------- | ----------------------------------------- |
+| neovim, tmux, fzf, stow, ripgrep, fd, uv, rustup, jj, tree-sitter-cli, opencode | ghostty, aerospace, obsidian, zen-browser |
 
 ### Ubuntu / WSL (apt)
 
 neovim (built from source), tmux, fzf, stow, ripgrep, fd-find, zsh, curl, git, build-essential,
-ninja-build, gettext, cmake
+ninja-build, gettext, cmake, tree-sitter-cli
 
 Rustup, uv, and opencode are installed via their official installers.
 
@@ -101,107 +106,106 @@ Leader key: `<Space>`
 
 #### General
 
-| Mode | Key | Action |
-| ---- | --- | ------ |
-| `i` | `<C-c>` | Exit insert mode |
-| `n` | `<leader>ex` | Open netrw explorer |
-| `n` | `<leader>nh` | Clear search highlight |
-| `n` | `x` | Delete char without yanking |
-| `n` | `<leader>+` / `<leader>-` | Increment / decrement number |
-| `n` | `<leader>r` | Search & replace word under cursor |
-| `x` | `<leader>p` | Paste without overwriting register |
-| `v` | `J` / `K` | Move selection down / up |
+| Mode | Key                       | Action                             |
+| ---- | ------------------------- | ---------------------------------- |
+| `i`  | `<C-c>`                   | Exit insert mode                   |
+| `n`  | `<leader>ex`              | Open netrw explorer                |
+| `n`  | `<leader>nh`              | Clear search highlight             |
+| `n`  | `x`                       | Delete char without yanking        |
+| `n`  | `<leader>+` / `<leader>-` | Increment / decrement number       |
+| `n`  | `<leader>r`               | Search & replace word under cursor |
+| `x`  | `<leader>p`               | Paste without overwriting register |
+| `v`  | `J` / `K`                 | Move selection down / up           |
 
 #### Splits & tabs
 
-| Mode | Key | Action |
-| ---- | --- | ------ |
-| `n` | `<leader>sv` | Split vertically |
-| `n` | `<leader>sh` | Split horizontally |
-| `n` | `<leader>se` | Equalize splits |
-| `n` | `<leader>sx` | Close split |
-| `n` | `<leader>to` | New tab |
-| `n` | `<leader>tx` | Close tab |
-| `n` | `<leader>tn` / `<leader>tp` | Next / previous tab |
+| Mode | Key                         | Action              |
+| ---- | --------------------------- | ------------------- |
+| `n`  | `<leader>sv`                | Split vertically    |
+| `n`  | `<leader>sh`                | Split horizontally  |
+| `n`  | `<leader>se`                | Equalize splits     |
+| `n`  | `<leader>sx`                | Close split         |
+| `n`  | `<leader>to`                | New tab             |
+| `n`  | `<leader>tx`                | Close tab           |
+| `n`  | `<leader>tn` / `<leader>tp` | Next / previous tab |
 
 #### LSP (buffer-local, on attach)
 
-| Mode | Key | Action |
-| ---- | --- | ------ |
-| `n` | `gd` | Definitions (Telescope) |
-| `n` | `grr` | References (Telescope) |
-| `n` | `gri` | Implementations (Telescope) |
-| `n` | `grt` | Type definitions (Telescope) |
-| `n` | `grd` | Line diagnostics (float) |
-| `n` | `grD` | Buffer diagnostics (Telescope) |
-| `n` | `<leader>rs` | Restart LSP |
+| Mode | Key   | Action                         |
+| ---- | ----- | ------------------------------ |
+| `n`  | `gd`  | Definitions (Telescope)        |
+| `n`  | `grr` | References (Telescope)         |
+| `n`  | `gri` | Implementations (Telescope)    |
+| `n`  | `grt` | Type definitions (Telescope)   |
+| `n`  | `grd` | Line diagnostics (float)       |
+| `n`  | `grD` | Buffer diagnostics (Telescope) |
 
 #### Telescope
 
-| Mode | Key | Action |
-| ---- | --- | ------ |
-| `n` | `<leader>ff` | Find files |
-| `n` | `<leader>fg` | Live grep |
-| `n` | `<leader>fb` | Buffers |
-| `n` | `<leader>fh` | Help tags |
-| `n` | `<leader>fF` | Find files (hidden) |
-| `n` | `<leader>fG` | Live grep (hidden) |
+| Mode | Key          | Action              |
+| ---- | ------------ | ------------------- |
+| `n`  | `<leader>ff` | Find files          |
+| `n`  | `<leader>fg` | Live grep           |
+| `n`  | `<leader>fb` | Buffers             |
+| `n`  | `<leader>fh` | Help tags           |
+| `n`  | `<leader>fF` | Find files (hidden) |
+| `n`  | `<leader>fG` | Live grep (hidden)  |
 
 #### Harpoon
 
-| Mode | Key | Action |
-| ---- | --- | ------ |
-| `n` | `<leader>ha` | Add file |
-| `n` | `<leader>hh` | Toggle quick menu |
-| `n` | `<leader>hj` / `hk` / `hl` / `h;` | Select slot 1–4 |
+| Mode | Key                               | Action            |
+| ---- | --------------------------------- | ----------------- |
+| `n`  | `<leader>ha`                      | Add file          |
+| `n`  | `<leader>hh`                      | Toggle quick menu |
+| `n`  | `<leader>hj` / `hk` / `hl` / `h;` | Select slot 1–4   |
 
 #### Completion (nvim-cmp, insert mode)
 
-| Key | Action |
-| --- | ------ |
+| Key               | Action               |
+| ----------------- | -------------------- |
 | `<C-p>` / `<C-n>` | Previous / next item |
-| `<C-b>` / `<C-f>` | Scroll docs |
-| `<C-Space>` | Trigger completion |
-| `<C-y>` | Confirm |
-| `<C-Y>` | Confirm (replace) |
-| `<C-e>` | Abort |
+| `<C-b>` / `<C-f>` | Scroll docs          |
+| `<C-Space>`       | Trigger completion   |
+| `<C-y>`           | Confirm              |
+| `<C-Y>`           | Confirm (replace)    |
+| `<C-e>`           | Abort                |
 
 #### Git (Fugitive)
 
-| Mode | Key | Action |
-| ---- | --- | ------ |
-| `n` | `<leader>fu` | Open `:Git` |
+| Mode | Key          | Action      |
+| ---- | ------------ | ----------- |
+| `n`  | `<leader>fu` | Open `:Git` |
 
 #### No Neck Pain
 
-| Mode | Key | Action |
-| ---- | --- | ------ |
-| `n` | `<leader>np` | Toggle centering |
-| `n` | `<leader>nql` / `<leader>nqr` | Toggle left / right side buffer |
-| `n` | `<leader>n=` / `<leader>n-` | Increase / decrease width |
+| Mode | Key                           | Action                          |
+| ---- | ----------------------------- | ------------------------------- |
+| `n`  | `<leader>np`                  | Toggle centering                |
+| `n`  | `<leader>nql` / `<leader>nqr` | Toggle left / right side buffer |
+| `n`  | `<leader>n=` / `<leader>n-`   | Increase / decrease width       |
 
 #### OpenCode
 
-| Mode | Key | Action |
-| ---- | --- | ------ |
-| `n,x` | `<leader>oa` | Ask opencode |
-| `n,x` | `<leader>ox` | Select opencode action |
-| `n,t` | `<leader>ot` | Toggle opencode |
-| `n,x` | `go` | Add range to opencode |
-| `n` | `goo` | Add line to opencode |
-| `n` | `<S-C-u>` / `<S-C-d>` | Scroll opencode up / down |
+| Mode  | Key                   | Action                    |
+| ----- | --------------------- | ------------------------- |
+| `n,x` | `<leader>oa`          | Ask opencode              |
+| `n,x` | `<leader>ox`          | Select opencode action    |
+| `n,t` | `<leader>ot`          | Toggle opencode           |
+| `n,x` | `go`                  | Add range to opencode     |
+| `n`   | `goo`                 | Add line to opencode      |
+| `n`   | `<S-C-u>` / `<S-C-d>` | Scroll opencode up / down |
 
 #### 99
 
-| Mode | Key | Action |
-| ---- | --- | ------ |
-| `v` | `<leader>9v` | Send visual selection |
-| `n` | `<leader>9x` | Stop all requests |
-| `n` | `<leader>9s` | Search |
+| Mode | Key          | Action                |
+| ---- | ------------ | --------------------- |
+| `v`  | `<leader>9v` | Send visual selection |
+| `n`  | `<leader>9x` | Stop all requests     |
+| `n`  | `<leader>9s` | Search                |
 
 #### Other
 
-| Mode | Key | Action |
-| ---- | --- | ------ |
-| `n` | `<leader>sm` | Maximize / minimize split (vim-maximizer) |
-| `n` | `<leader>u` | Toggle undo tree |
+| Mode | Key          | Action                                    |
+| ---- | ------------ | ----------------------------------------- |
+| `n`  | `<leader>sm` | Maximize / minimize split (vim-maximizer) |
+| `n`  | `<leader>u`  | Toggle undo tree                          |
