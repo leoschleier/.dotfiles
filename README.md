@@ -195,14 +195,6 @@ Leader key: `<Space>`
 | `n`   | `goo`                 | Add line to opencode      |
 | `n`   | `<S-C-u>` / `<S-C-d>` | Scroll opencode up / down |
 
-#### 99
-
-| Mode | Key          | Action                |
-| ---- | ------------ | --------------------- |
-| `v`  | `<leader>9v` | Send visual selection |
-| `n`  | `<leader>9x` | Stop all requests     |
-| `n`  | `<leader>9s` | Search                |
-
 #### Other
 
 | Mode | Key          | Action                                    |
