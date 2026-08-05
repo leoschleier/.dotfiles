@@ -16,12 +16,18 @@ PACKAGES=(
     ripgrep
     stow
     tmux
-    tree-sitter-cli
     zsh
 )
 
 echo "Installing apt packages..."
 sudo apt-get install -y "${PACKAGES[@]}"
+
+# tree-sitter-cli only exists in Ubuntu 24.04+ (noble) universe
+if apt-cache show tree-sitter-cli &>/dev/null; then
+    sudo apt-get install -y tree-sitter-cli
+else
+    echo "tree-sitter-cli not available via apt (Ubuntu <24.04), skipping. Install via cargo if needed."
+fi
 
 # Create fd symlink (Ubuntu packages it as fdfind)
 if command -v fdfind &>/dev/null && ! command -v fd &>/dev/null; then

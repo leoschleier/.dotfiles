@@ -15,7 +15,7 @@ fi
 [[ -s "$NVM_DIR/nvm.sh" ]] && . "$NVM_DIR/nvm.sh"
 
 # Install Node LTS if not already installed
-if ! nvm ls --no-colors 2>/dev/null | grep -q "lts"; then
+if [[ "$(nvm version lts/* 2>/dev/null)" == "N/A" ]]; then
     echo "Installing Node LTS..."
     nvm install --lts
 else

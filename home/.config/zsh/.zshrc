@@ -80,7 +80,7 @@ ZSH_THEME="robbyrussell"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git)
 
-source $ZSH/oh-my-zsh.sh
+source "$ZSH/oh-my-zsh.sh"
 
 # fzf shell integration (key bindings + completion)
 if command -v fzf &>/dev/null; then
@@ -133,7 +133,7 @@ export NVM_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/nvm"
 [[ -s "$NVM_DIR/bash_completion" ]] && . "$NVM_DIR/bash_completion"
 
 # opencode
-export PATH=/home/bho36/.opencode/bin:$PATH
+export PATH=$HOME/.opencode/bin:$PATH
 
 # tmux-sessionizer key bindings
 bindkey -s "^f" "tmux-sessionizer\n"

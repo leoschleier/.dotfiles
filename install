@@ -41,6 +41,16 @@ esac
 "$COMMON_DIR/stow.sh"
 "$COMMON_DIR/nvm.sh"
 
+# Set zsh as login shell if it's installed but not the current shell (Linux)
+if [[ "$(uname -s)" == Linux ]] && command -v zsh &>/dev/null && [[ "$SHELL" != "$(command -v zsh)" ]]; then
+    echo "Setting zsh as login shell..."
+    chsh -s "$(command -v zsh)" || echo "Warning: failed to set zsh as login shell. Run manually: chsh -s $(command -v zsh)"
+fi
+
 echo ""
 echo "=== Bootstrap complete ==="
 echo "Restart your terminal or run: exec zsh"
+echo ""
+echo "Note: set your git identity before committing:"
+echo "  git config --global user.name <name> && git config --global user.email <email>"
+echo "  (jj falls back to ~/.gitconfig, so a single git config covers both)"
