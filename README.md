@@ -44,6 +44,7 @@ Re-running `./install` is safe — all scripts are idempotent.
 │   └── .config/
 │       ├── aerospace/     # macOS tiling WM (ignored on Linux)
 │       ├── ghostty/       # macOS/Linux terminal (ignored on WSL)
+│       ├── hypr/          # Hyprland Wayland compositor (Arch Linux)
 │       ├── jj/            # Jujutsu VCS
 │       ├── nvim/
 │       ├── opencode/
@@ -86,7 +87,7 @@ symlinks in `$HOME` matching the directory layout.
 ### Arch Linux (pacman)
 
 neovim, tmux, fzf, stow, ripgrep, fd, zsh, curl, git, gcc, tree-sitter-cli, uv, rustup,
-jujutsu, opencode — plus GUI apps ghostty, obsidian, firefox. All from official repos
+jujutsu, opencode — plus GUI apps ghostty, hyprland, obsidian, firefox. All from official repos
 (no AUR).
 
 ### Ubuntu / WSL (apt)
