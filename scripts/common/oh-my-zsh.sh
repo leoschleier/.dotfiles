@@ -9,6 +9,6 @@ if [[ -d "$ZSH" ]]; then
 fi
 
 echo "Installing oh-my-zsh..."
-# RUNZSH=no  prevents oh-my-zsh from launching a new shell
-# KEEP_ZSHRC=yes  prevents oh-my-zsh from overwriting our managed .zshrc
-RUNZSH=no KEEP_ZSHRC=yes sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+# Clone directly (instead of the official installer) so no ~/.zshrc template is
+# written. Our zsh config lives in $ZDOTDIR (XDG path); chsh is handled in ./install.
+git clone --depth=1 https://github.com/ohmyzsh/ohmyzsh.git "$ZSH"
