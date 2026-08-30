@@ -1,0 +1,190 @@
+/* Waybar style with Rose Pine theme */
+/* https://rosepinetheme.com/palette/ */
+
+* {
+    font-family: "JetBrainsMono Nerd Font", "Font Awesome 6 Free", sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    min-height: 0;
+    padding: 0;
+    margin: 0;
+}
+
+@define-color base #191724;
+@define-color surface #1f1d2e;
+@define-color overlay #26233a;
+@define-color muted #6e6a86;
+@define-color subtle #908caa;
+@define-color text #e0def4;
+@define-color love #eb6f92;
+@define-color gold #f6c177;
+@define-color rose #ebbcba;
+@define-color pine #31748f;
+@define-color foam #9ccfd8;
+@define-color iris #c4a7e7;
+
+window#waybar {
+    background-color: alpha(@base, 0.85);
+    color: @text;
+    border-radius: 10px;
+    transition-property: background-color;
+    transition-duration: .5s;
+}
+
+button {
+    box-shadow: inset 0 -3px transparent;
+    border: none;
+    border-radius: 8px;
+    padding: 0 10px;
+    margin: 2px 4px;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background: alpha(@overlay, 0.6);
+    box-shadow: inset 0 -3px @overlay;
+}
+
+#workspaces button {
+    background: @surface;
+    color: @muted;
+    border-radius: 8px;
+    padding: 0 8px;
+    margin: 2px 2px;
+    transition: all 0.2s ease;
+}
+
+#workspaces button:hover {
+    background: @overlay;
+    color: @text;
+}
+
+#workspaces button.active {
+    background: @iris;
+    color: @base;
+    padding: 0 12px;
+}
+
+#workspaces button.urgent {
+    background: @love;
+    color: @base;
+}
+
+#clock,
+#battery,
+#cpu,
+#memory,
+#temperature,
+#network,
+#pulseaudio,
+#bluetooth,
+#mpris,
+#notifications,
+#tray {
+    padding: 0 12px;
+    margin: 2px 4px;
+    border-radius: 8px;
+    background: @surface;
+    color: @text;
+}
+
+#clock {
+    color: @iris;
+    background: @surface;
+}
+
+#battery {
+    color: @foam;
+}
+
+#battery.charging,
+#battery.plugged {
+    color: @gold;
+}
+
+#battery.warning:not(.charging) {
+    color: @gold;
+    background: alpha(@gold, 0.15);
+}
+
+#battery.critical:not(.charging) {
+    color: @love;
+    background: alpha(@love, 0.2);
+    animation: blink 0.5s linear infinite alternate;
+}
+
+@keyframes blink {
+    to {
+        background-color: alpha(@love, 0.4);
+    }
+}
+
+#pulseaudio {
+    color: @rose;
+}
+
+#pulseaudio.muted {
+    color: @muted;
+    background: alpha(@muted, 0.1);
+}
+
+#pulseaudio.microphone {
+    color: @pine;
+}
+
+#pulseaudio.microphone.muted {
+    color: @muted;
+}
+
+#network {
+    color: @foam;
+}
+
+#network.disconnected {
+    color: @muted;
+}
+
+#temperature {
+    color: @foam;
+}
+
+#temperature.critical {
+    color: @love;
+    background: alpha(@love, 0.15);
+}
+
+#memory {
+    color: @iris;
+}
+
+#bluetooth {
+    color: @foam;
+}
+
+#bluetooth.disabled,
+#bluetooth.off {
+    color: @muted;
+}
+
+#mpris {
+    color: @rose;
+}
+
+#notifications {
+    color: @gold;
+}
+
+#notifications.notification-inhibited {
+    color: @muted;
+}
+
+tooltip {
+    background: @surface;
+    border: 1px solid @overlay;
+    border-radius: 8px;
+    padding: 8px;
+}
+
+tooltip label {
+    color: @text;
+}
