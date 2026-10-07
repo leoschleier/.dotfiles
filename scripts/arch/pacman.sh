@@ -9,9 +9,11 @@ PACKAGES=(
     fd
     firefox
     fzf
+    flameshot
     gcc
     ghostty
     git
+    hypr
     jujutsu
     neovim
     obsidian
@@ -19,9 +21,12 @@ PACKAGES=(
     ripgrep
     rustup
     stow
+    tar
     tmux
     tree-sitter-cli
     uv
+    unzip
+    waybar
     zsh
 )
 
