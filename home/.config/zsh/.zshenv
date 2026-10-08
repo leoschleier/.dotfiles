@@ -6,6 +6,9 @@ fi
 
 [[ -f "$HOME/.env.local" ]] && . "$HOME/.env.local"
 
+# User-local binaries
+export PATH="$HOME/.local/bin:$PATH"
+
 [[ -f "$HOME/.local/bin/env" ]] && . "$HOME/.local/bin/env"
 
 [[ -f "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"
