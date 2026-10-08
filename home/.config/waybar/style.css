@@ -47,16 +47,28 @@ button:hover {
 
 #workspaces button {
     background: @surface;
-    color: @muted;
+    color: @subtle;
     border-radius: 8px;
     padding: 0 8px;
     margin: 2px 2px;
     transition: all 0.2s ease;
 }
 
+/* Empty persistent workspaces stay dim */
+#workspaces button.empty {
+    color: @muted;
+}
+
 #workspaces button:hover {
     background: @overlay;
     color: @text;
+}
+
+/* Workspace shown on an unfocused monitor */
+#workspaces button.visible {
+    background: @overlay;
+    color: @text;
+    box-shadow: inset 0 -3px @pine;
 }
 
 #workspaces button.active {
@@ -132,8 +144,10 @@ button:hover {
     color: @pine;
 }
 
+/* The pulseaudio module's "muted" class follows the sink, so it must not
+   dim the microphone indicator; its state is shown via format-source(-muted). */
 #pulseaudio.microphone.muted {
-    color: @muted;
+    color: @pine;
 }
 
 #network {

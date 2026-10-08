@@ -40,9 +40,7 @@
             "7": "7",
             "8": "8",
             "9": "9",
-            "10": "10",
-            "active": "",
-            "default": ""
+            "10": "10"
         },
         "all-outputs": false,
         "active-only": false,
@@ -72,9 +70,9 @@
 
     "pulseaudio": {
         "format": "{icon}  {volume}%",
-        "format-muted": "  muted",
+        "format-muted": "  muted",
         "format-icons": {
-            "default": ["", "", ""]
+            "default": ["", "", ""]
         },
         "scroll-step": 5,
         "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
@@ -84,23 +82,18 @@
     },
 
     "pulseaudio#microphone": {
-        "format": "{icon}  {volume}%",
-        "format-muted": "  muted",
-        "format-icons": {
-            "default": ["", "", ""]
-        },
-        "scroll-step": 5,
+        "format": "{format_source}",
+        "format-source": "",
+        "format-source-muted": "<span color='#6e6a86'>  muted</span>",
         "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
-        "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%+",
-        "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%-",
-        "tooltip-format": "{volume}%"
+        "tooltip-format": "Mic: {format_source}"
     },
 
     "network": {
         "interface": "wlp3s0",
-        "format-wifi": "  {signalStrength}%",
-        "format-ethernet": "  {ifname}",
-        "format-disconnected": "  Disconnected",
+        "format-wifi": "  {signalStrength}%",
+        "format-ethernet": "  {ifname}",
+        "format-disconnected": "  Disconnected",
         "tooltip-format-wifi": "{essid} ({signalStrength}%)\n{ipaddr}/{cidr}",
         "tooltip-format-ethernet": "{ifname}\n{ipaddr}/{cidr}",
         "tooltip-format-disconnected": "Disconnected",
@@ -116,16 +109,16 @@
             "critical": 15
         },
         "format": "{icon}  {capacity}%",
-        "format-charging": "  {capacity}%",
-        "format-plugged": "  {capacity}%",
+        "format-charging": "  {capacity}%",
+        "format-plugged": "  {capacity}%",
         "format-alt": "{icon}  {time}",
-        "format-icons": ["", "", "", "", ""],
+        "format-icons": ["", "", "", "", ""],
         "tooltip-format": "{timeTo}\n{power}W"
     },
 
     "memory": {
         "interval": 5,
-        "format": "  {percentage}%",
+        "format": "  {percentage}%",
         "tooltip-format": "RAM: {used}GiB / {total}GiB\n{percentage}%"
     },
 
@@ -135,14 +128,14 @@
         "dynamic-len": 30,
         "dynamic-importance": "title",
         "player-icons": {
-            "default": "",
-            "mpv": "",
-            "spotify": "",
-            "firefox": "",
-            "chromium": ""
+            "default": "",
+            "mpv": "",
+            "spotify": "",
+            "firefox": "",
+            "chromium": ""
         },
         "status-icons": {
-            "paused": ""
+            "paused": ""
         },
         "on-click": "playerctl play-pause",
         "on-click-right": "playerctl next",
@@ -150,14 +143,13 @@
     },
 
     "bluetooth": {
-        "format": "",
-        "format-disabled": "",
-        "format-connected": " {num_connections}",
+        "format": "",
+        "format-disabled": "",
+        "format-connected": "  {num_connections}",
         "format-off": "",
         "tooltip-format": "{controller_alias}\t{controller_address}",
         "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{device_enumerate}",
         "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
-        "on-click": "bluetoothctl scan on",
-        "on-click-right": "bluetoothctl scan off"
+        "on-click": "rfkill list bluetooth | grep -q 'Soft blocked: yes' && rfkill unblock bluetooth || rfkill block bluetooth"
     }
 }
