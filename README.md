@@ -107,6 +107,47 @@ Rustup, uv, and opencode are installed via their official installers.
 1. Place the config file at `home/.config/<tool>/<file>` (mirroring the `$HOME` path).
 2. Run `stow --dir=~/.dotfiles --target=$HOME home` (or re-run `./install`).
 
+## Hyprland
+
+Main modifier: `SUPER` (Windows key). Config lives in `home/.config/hypr/hyprland.lua`.
+
+### Apps
+
+| Key           | Action                    |
+| ------------- | ------------------------- |
+| `SUPER + Q`   | Open terminal (ghostty)   |
+| `SUPER + B`   | Open browser (firefox)    |
+| `SUPER + O`   | Open Obsidian             |
+| `SUPER + E`   | Open file manager (yazi)  |
+| `SUPER + R`   | Open launcher             |
+| `SUPER + M`   | Shutdown / exit Hyprland  |
+
+### Windows & workspaces
+
+| Key                    | Action                              |
+| ---------------------- | ----------------------------------- |
+| `SUPER + C`            | Close active window                 |
+| `SUPER + V`            | Toggle floating / tiling            |
+| `SUPER + P`            | Toggle pseudo mode                  |
+| `SUPER + J`            | Toggle split direction (dwindle)    |
+| `SUPER + ←/→/↑/↓`      | Move focus                          |
+| `SUPER + 1-0`          | Switch to workspace 1–10            |
+| `SUPER + SHIFT + 1-0`  | Move window to workspace 1–10       |
+| `SUPER + S`            | Toggle special workspace (scratchpad) |
+| `SUPER + SHIFT + S`    | Move window to special workspace    |
+| `SUPER + scroll`       | Cycle workspaces                    |
+| `SUPER + LMB drag`     | Drag window                         |
+| `SUPER + RMB drag`     | Resize window                       |
+
+### Media keys
+
+| Key                        | Action              |
+| -------------------------- | ------------------- |
+| `XF86AudioRaiseVolume` / `XF86AudioLowerVolume` | Volume up / down |
+| `XF86AudioMute` / `XF86AudioMicMute`            | Mute sink / source |
+| `XF86MonBrightnessUp` / `XF86MonBrightnessDown` | Brightness up / down |
+| `XF86Audio{Play,Pause,Next,Prev}`               | Media control (playerctl) |
+
 ## Neovim
 
 ### LSP

@@ -33,6 +33,7 @@ local terminal = "ghostty"
 local fileManager = "yazi"
 local menu = "hyprlauncher"
 local browser = "firefox"
+local notes = "obsidian"
 
 -------------------
 ---- AUTOSTART ----
@@ -267,6 +268,7 @@ hl.device({
 -- SUPER + Q          - Open terminal
 -- SUPER + C          - Close active window
 -- SUPER + B          - Open browser
+-- SUPER + O          - Open Obsidian
 -- SUPER + E          - Open file manager
 -- SUPER + V          - Toggle floating/tiling
 -- SUPER + R          - Open launcher
@@ -289,6 +291,7 @@ hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd(terminal))
 local closeWindowBind = hl.bind(mainMod .. " + C", hl.dsp.window.close())
 -- closeWindowBind:set_enabled(false)
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(browser))
+hl.bind(mainMod .. " + O", hl.dsp.exec_cmd(notes))
 hl.bind(
 	mainMod .. " + M",
 	hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'")
