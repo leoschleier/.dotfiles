@@ -7,10 +7,20 @@
 ------------------
 
 -- See https://wiki.hypr.land/Configuring/Basics/Monitors/
+-- First matching rule wins: laptop panel pinned to 0x0, any additional
+-- monitor is placed to its right. Use "desc:<description>" from
+-- `hyprctl monitors` to match a monitor independent of connector names.
+hl.monitor({
+	output = "eDP-1",
+	mode = "preferred",
+	position = "0x0",
+	scale = "auto",
+})
+
 hl.monitor({
 	output = "",
 	mode = "preferred",
-	position = "auto",
+	position = "auto-right",
 	scale = "auto",
 })
 
@@ -148,8 +158,10 @@ hl.animation({ leaf = "zoomFactor", enabled = true, speed = 7, bezier = "quick" 
 
 -- Ref https://wiki.hypr.land/Configuring/Basics/Workspace-Rules/
 
--- Main monitor configuration
-local main_monitor = "" -- Set to your main monitor output name or "desc:..." prefix
+-- Main monitor configuration. Persistent workspaces 1-5 are pinned to the
+-- external ASUS monitor when it is connected; while it is absent, Hyprland
+-- falls back to the available (laptop) monitor.
+local main_monitor = "desc:ASUSTek COMPUTER INC ROG PG278QR J7LMQS001695"
 
 -- Persistent workspaces 1-5 on main monitor
 for i = 1, 5 do
