@@ -92,6 +92,10 @@ if command -v fzf &>/dev/null; then
     elif [[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ]]; then
         source /usr/share/doc/fzf/examples/key-bindings.zsh
         source /usr/share/doc/fzf/examples/completion.zsh
+    # pacman (Arch)
+    elif [[ -f /usr/share/fzf/key-bindings.zsh ]]; then
+        source /usr/share/fzf/key-bindings.zsh
+        source /usr/share/fzf/completion.zsh
     fi
 fi
 
