@@ -46,6 +46,8 @@ local notes = "obsidian"
 
 hl.on("hyprland.start", function()
 	hl.exec_cmd("waybar")
+	hl.exec_cmd("hypridle") -- idle daemon: locks screen and powers off display
+	hl.exec_cmd("dunst") -- notification daemon
 end)
 
 -------------------------------
@@ -269,6 +271,7 @@ hl.device({
 -- SUPER + C          - Close active window
 -- SUPER + B          - Open browser
 -- SUPER + O          - Open Obsidian
+-- SUPER + L          - Lock screen
 -- SUPER + E          - Open file manager
 -- SUPER + V          - Toggle floating/tiling
 -- SUPER + R          - Open launcher
@@ -296,6 +299,7 @@ hl.bind(
 	mainMod .. " + M",
 	hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'")
 )
+hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("loginctl lock-session")) -- handled by hypridle -> hyprlock
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(menu))

@@ -1,0 +1,42 @@
+# Dunst configuration - Rose Pine colors
+# https://dunst-project.org/documentation/
+
+[global]
+    font = JetBrainsMono Nerd Font 10
+
+    origin = top-right
+    offset = 10x10
+    width = (0, 400)
+    notification_limit = 5
+
+    frame_width = 2
+    corner_radius = 10
+    gap_size = 4
+    padding = 12
+    horizontal_padding = 12
+    separator_height = 2
+
+    format = "<b>%s</b>\n%b"
+    show_age_threshold = 60
+
+    progress_bar = true
+    progress_bar_height = 10
+    progress_bar_frame_width = 1
+
+[urgency_low]
+    background = "#191724"
+    foreground = "#908caa"
+    frame_color = "#26233a"
+    timeout = 5
+
+[urgency_normal]
+    background = "#191724"
+    foreground = "#e0def4"
+    frame_color = "#c4a7e7"
+    timeout = 10
+
+[urgency_critical]
+    background = "#191724"
+    foreground = "#e0def4"
+    frame_color = "#eb6f92"
+    timeout = 0
