@@ -30,7 +30,7 @@ hl.monitor({
 
 -- Set programs that you use
 local terminal = "ghostty"
-local fileManager = "yazi"
+local fileManager = "thunar"
 local menu = "hyprlauncher"
 local browser = "firefox"
 local notes = "obsidian"
@@ -231,7 +231,7 @@ hl.config({
 		kb_layout = "us",
 		kb_variant = "",
 		kb_model = "",
-		kb_options = "",
+		kb_options = "ctrl:nocaps", -- Map Caps Lock to Ctrl
 		kb_rules = "",
 
 		repeat_rate = 50,
