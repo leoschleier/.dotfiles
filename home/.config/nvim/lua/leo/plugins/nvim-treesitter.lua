@@ -10,6 +10,8 @@ return {
             "c_sharp",
             "dockerfile",
             "gitignore",
+            "javascript",
+            "jsdoc",
             "json",
             "lua",
             "markdown",
@@ -20,6 +22,8 @@ return {
             "vimdoc",
             "query",
             "toml",
+            "tsx",
+            "typescript",
             "yaml",
         }
         require("nvim-treesitter").install(parsers)

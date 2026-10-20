@@ -89,6 +89,7 @@ return {
 
         local servers = {
             dockerls = {},
+            eslint = {},
             jsonls = {},
             lua_ls = {},
             marksman = {},
@@ -108,6 +109,7 @@ return {
                 },
             },
             taplo = {},
+            ts_ls = {},
             yamlls = {},
         }
 

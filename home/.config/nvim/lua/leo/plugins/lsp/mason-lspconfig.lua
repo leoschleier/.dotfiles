@@ -4,6 +4,7 @@ return {
         automatic_enable = false, -- Enabled via nvim-lspconfig
         ensure_installed = {
             "dockerls",
+            "eslint",
             "jsonls",
             "lua_ls",
             "marksman",
@@ -11,6 +12,7 @@ return {
             "ruff",
             "rust_analyzer",
             "taplo",
+            "ts_ls",
             "yamlls",
         },
     },
