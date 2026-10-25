@@ -27,6 +27,7 @@ PACKAGES=(
     hyprland                    # Dynamic tiling Wayland compositor
     hyprlauncher                # App launcher for Hyprland
     hyprlock                    # Screen locker for Hyprland
+    hyprpaper                   # Wallpaper utility for Hyprland
     hyprpolkitagent             # Polkit authentication agent (GUI root prompts)
     jujutsu                     # Git-compatible VCS (jj)
     libva-utils                 # VA-API tools (vainfo) for hardware video acceleration
