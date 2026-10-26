@@ -136,6 +136,9 @@ export NVM_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/nvm"
 # opencode
 export PATH=$HOME/.opencode/bin:$PATH
 
+# hunk
+export PATH=$HOME/.hunk/bin:$PATH
+
 # tmux-sessionizer key bindings
 bindkey -s "^f" "tmux-sessionizer\n"
 

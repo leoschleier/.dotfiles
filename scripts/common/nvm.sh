@@ -8,7 +8,7 @@ if [[ -d "$NVM_DIR" ]]; then
 else
     echo "Installing nvm..."
     mkdir -p "$NVM_DIR"
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | PROFILE=/dev/null bash
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.8/install.sh | PROFILE=/dev/null bash
 fi
 
 # Source nvm for this session

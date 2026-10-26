@@ -59,7 +59,8 @@ Re-running `./install` is safe — all scripts are idempotent.
 │   ├── common/            # Portable install modules (all platforms)
 │   │   ├── oh-my-zsh.sh
 │   │   ├── stow.sh        # GNU Stow symlinks
-│   │   └── nvm.sh         # nvm + Node LTS
+│   │   ├── nvm.sh         # nvm + Node LTS
+│   │   └── hunk.sh        # hunk (terminal diff viewer)
 │   ├── macos/             # macOS-specific
 │   │   └── brew.sh        # Homebrew + packages + casks + rustup + opencode
 │   └── ubuntu/            # Ubuntu/WSL-specific
@@ -101,6 +102,7 @@ Rustup, uv, and opencode are installed via their official installers.
 
 - **oh-my-zsh** — installed to `~/.local/share/oh-my-zsh`
 - **nvm + Node LTS** — installed to `~/.local/share/nvm`
+- **hunk** — installed to `~/.hunk/bin`
 
 ## Adding a new config
 
