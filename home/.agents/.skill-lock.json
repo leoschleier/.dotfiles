@@ -1,0 +1,26 @@
+{
+  "version": 3,
+  "skills": {
+    "find-skills": {
+      "source": "vercel-labs/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/skills.git",
+      "skillPath": "skills/find-skills/SKILL.md",
+      "skillFolderHash": "76a98a285cb0434f3d39e1a873823556330e398b",
+      "installedAt": "2026-10-18T14:54:46.137Z",
+      "updatedAt": "2026-10-18T14:54:46.137Z"
+    },
+    "hunk-review": {
+      "source": "modem-dev/hunk",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/modem-dev/hunk.git",
+      "skillPath": ".agents/skills/hunk-review/SKILL.md",
+      "skillFolderHash": "48ebdc86f8d7d4aea4e01379d65f2911b8b3c93f",
+      "installedAt": "2026-10-26T20:51:37.754Z",
+      "updatedAt": "2026-10-26T20:51:37.754Z"
+    }
+  },
+  "dismissed": {
+    "findSkillsPrompt": true
+  }
+}
