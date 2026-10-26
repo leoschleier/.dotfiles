@@ -1,3 +1,15 @@
+#:schema https://docs.jj-vcs.dev/latest/config-schema.json
+
 [ui]
-default-command = "log"
 editor = "nvim"
+default-command = "log"
+diff-formatter = ":git"
+
+[ui.movement]
+edit = true
+
+[revset-aliases]
+"trunk()" = "main@origin"
+
+[templates]
+config_list = "builtin_config_list_detailed"
