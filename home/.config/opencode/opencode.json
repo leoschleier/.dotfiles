@@ -133,8 +133,7 @@
         "webfetch": "ask",
         "websearch": "allow"
     },
-    "plugin": [
-        "@mohak34/opencode-notifier@latest",
+    "plugins": [
         "@plannotator/opencode@latest"
     ],
     "mcp": {
