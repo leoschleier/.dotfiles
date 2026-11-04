@@ -41,6 +41,7 @@ esac
 "$COMMON_DIR/stow.sh"
 "$COMMON_DIR/nvm.sh"
 "$COMMON_DIR/hunk.sh"
+"$COMMON_DIR/plannotator.sh"
 
 # Set zsh as login shell if it's installed but not the current shell (Linux)
 if [[ "$(uname -s)" == Linux ]] && command -v zsh &>/dev/null && [[ "$SHELL" != "$(command -v zsh)" ]]; then

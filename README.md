@@ -60,7 +60,8 @@ Re-running `./install` is safe — all scripts are idempotent.
 │   │   ├── oh-my-zsh.sh
 │   │   ├── stow.sh        # GNU Stow symlinks
 │   │   ├── nvm.sh         # nvm + Node LTS
-│   │   └── hunk.sh        # hunk (terminal diff viewer)
+│   │   ├── hunk.sh        # hunk (terminal diff viewer)
+│   │   └── plannotator.sh # plannotator (plan/diff review UI)
 │   ├── macos/             # macOS-specific
 │   │   └── brew.sh        # Homebrew + packages + casks + rustup + opencode
 │   └── ubuntu/            # Ubuntu/WSL-specific
@@ -103,6 +104,7 @@ Rustup, uv, and opencode are installed via their official installers.
 - **oh-my-zsh** — installed to `~/.local/share/oh-my-zsh`
 - **nvm + Node LTS** — installed to `~/.local/share/nvm`
 - **hunk** — installed to `~/.hunk/bin`
+- **plannotator** — installed to `~/.local/bin`
 
 ## Adding a new config
 
@@ -115,39 +117,39 @@ Main modifier: `SUPER` (Windows key). Config lives in `home/.config/hypr/hyprlan
 
 ### Apps
 
-| Key           | Action                    |
-| ------------- | ------------------------- |
-| `SUPER + Q`   | Open terminal (ghostty)   |
-| `SUPER + B`   | Open browser (firefox)    |
-| `SUPER + O`   | Open Obsidian             |
-| `SUPER + E`   | Open file manager (yazi)  |
-| `SUPER + R`   | Open launcher             |
-| `SUPER + M`   | Shutdown / exit Hyprland  |
+| Key         | Action                   |
+| ----------- | ------------------------ |
+| `SUPER + Q` | Open terminal (ghostty)  |
+| `SUPER + B` | Open browser (firefox)   |
+| `SUPER + O` | Open Obsidian            |
+| `SUPER + E` | Open file manager (yazi) |
+| `SUPER + R` | Open launcher            |
+| `SUPER + M` | Shutdown / exit Hyprland |
 
 ### Windows & workspaces
 
-| Key                    | Action                              |
-| ---------------------- | ----------------------------------- |
-| `SUPER + C`            | Close active window                 |
-| `SUPER + V`            | Toggle floating / tiling            |
-| `SUPER + P`            | Toggle pseudo mode                  |
-| `SUPER + J`            | Toggle split direction (dwindle)    |
-| `SUPER + ←/→/↑/↓`      | Move focus                          |
-| `SUPER + 1-0`          | Switch to workspace 1–10            |
-| `SUPER + SHIFT + 1-0`  | Move window to workspace 1–10       |
-| `SUPER + S`            | Toggle special workspace (scratchpad) |
-| `SUPER + SHIFT + S`    | Move window to special workspace    |
-| `SUPER + scroll`       | Cycle workspaces                    |
-| `SUPER + LMB drag`     | Drag window                         |
-| `SUPER + RMB drag`     | Resize window                       |
+| Key                   | Action                                |
+| --------------------- | ------------------------------------- |
+| `SUPER + C`           | Close active window                   |
+| `SUPER + V`           | Toggle floating / tiling              |
+| `SUPER + P`           | Toggle pseudo mode                    |
+| `SUPER + J`           | Toggle split direction (dwindle)      |
+| `SUPER + ←/→/↑/↓`     | Move focus                            |
+| `SUPER + 1-0`         | Switch to workspace 1–10              |
+| `SUPER + SHIFT + 1-0` | Move window to workspace 1–10         |
+| `SUPER + S`           | Toggle special workspace (scratchpad) |
+| `SUPER + SHIFT + S`   | Move window to special workspace      |
+| `SUPER + scroll`      | Cycle workspaces                      |
+| `SUPER + LMB drag`    | Drag window                           |
+| `SUPER + RMB drag`    | Resize window                         |
 
 ### Media keys
 
-| Key                        | Action              |
-| -------------------------- | ------------------- |
-| `XF86AudioRaiseVolume` / `XF86AudioLowerVolume` | Volume up / down |
-| `XF86AudioMute` / `XF86AudioMicMute`            | Mute sink / source |
-| `XF86MonBrightnessUp` / `XF86MonBrightnessDown` | Brightness up / down |
+| Key                                             | Action                    |
+| ----------------------------------------------- | ------------------------- |
+| `XF86AudioRaiseVolume` / `XF86AudioLowerVolume` | Volume up / down          |
+| `XF86AudioMute` / `XF86AudioMicMute`            | Mute sink / source        |
+| `XF86MonBrightnessUp` / `XF86MonBrightnessDown` | Brightness up / down      |
 | `XF86Audio{Play,Pause,Next,Prev}`               | Media control (playerctl) |
 
 ## Neovim

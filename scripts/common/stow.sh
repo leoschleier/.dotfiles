@@ -5,6 +5,9 @@ DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 
 echo "Creating symlinks with stow..."
 mkdir -p "$HOME/.config"
+# Keep ~/.local/bin a real directory: if stow folds it into a symlink, tools
+# that install binaries there (plannotator, uv tools) write into the repo.
+mkdir -p "$HOME/.local/bin"
 
 CONFLICT_FILE="$(mktemp)"
 trap 'rm -f "$CONFLICT_FILE"' EXIT
