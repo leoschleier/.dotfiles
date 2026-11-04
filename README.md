@@ -4,24 +4,6 @@ Leo's .dotfiles.
 
 ## Bootstrap
 
-### macOS
-
-```bash
-git clone git@github.com:leoschleier/.dotfiles.git ~/.dotfiles
-cd ~/.dotfiles
-./install
-```
-
-### Arch Linux
-
-```bash
-git clone git@github.com:leoschleier/.dotfiles.git ~/.dotfiles
-cd ~/.dotfiles
-./install
-```
-
-### Ubuntu (WSL)
-
 ```bash
 git clone git@github.com:leoschleier/.dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
@@ -34,44 +16,50 @@ Re-running `./install` is safe — all scripts are idempotent.
 
 ```
 .dotfiles/
-├── home/                  # Stow package — mirrors $HOME layout
-│   ├── .zshenv            # ZDOTDIR bootstrap (sets zsh config to ~/.config/zsh/)
-│   ├── .local/
-│   │   └── bin/
-│   │       ├── tmux-sessionizer
-│   │       ├── ws
-│   │       └── wt
-│   └── .config/
-│       ├── aerospace/     # macOS tiling WM (ignored on Linux)
-│       ├── ghostty/       # macOS/Linux terminal (ignored on WSL)
-│       ├── hypr/          # Hyprland Wayland compositor (Arch Linux)
-│       ├── jj/            # Jujutsu VCS
-│       ├── nvim/
-│       ├── opencode/
-│       ├── tmux/
-│       ├── tmux-sessionizer/
-│       ├── ws/
-│       ├── wt/
-│       └── zsh/
-├── scripts/
-│   ├── arch/              # Arch Linux-specific
-│   │   └── pacman.sh      # pacman packages + rustup init
-│   ├── common/            # Portable install modules (all platforms)
-│   │   ├── oh-my-zsh.sh
-│   │   ├── stow.sh        # GNU Stow symlinks
-│   │   ├── nvm.sh         # nvm + Node LTS
-│   │   ├── hunk.sh        # hunk (terminal diff viewer)
-│   │   └── plannotator.sh # plannotator (plan/diff review UI)
-│   ├── macos/             # macOS-specific
-│   │   └── brew.sh        # Homebrew + packages + casks + rustup + opencode
-│   └── ubuntu/            # Ubuntu/WSL-specific
-│       ├── apt.sh         # apt packages + build deps
-│       ├── neovim.sh      # Neovim (built from source)
-│       ├── opencode.sh    # opencode CLI
-│       ├── rustup.sh      # Rust toolchain
-│       └── uv.sh          # Python package manager
-├── install                # Main entry point (detects OS)
-└── .vscode/               # VS Code reference configs (not stowed)
+├── .vscode/                      # VS Code reference configs (not stowed)
+├── home/                         # Stow package — mirrors $HOME layout
+│   ├── .agents/                  # Agent skills shared across agents
+│   ├── .config/                  # App configs (~/.config)
+│   │   ├── aerospace/            # macOS tiling WM (ignored on Linux)
+│   │   ├── dunst/                # Notification daemon (Linux)
+│   │   ├── ghostty/              # macOS/Linux terminal (ignored on WSL)
+│   │   ├── hypr/                 # Hyprland Wayland compositor (Arch Linux)
+│   │   ├── jj/                   # Jujutsu VCS
+│   │   ├── nvim/                 # Neovim config
+│   │   ├── opencode/             # OpenCode config (agents, commands, skills, plugins)
+│   │   ├── tmux/                 # tmux config
+│   │   ├── tmux-sessionizer/     # tmux-sessionizer config
+│   │   ├── waybar/               # Status bar (Hyprland)
+│   │   ├── ws/                   # ws (jj workspace switcher) config
+│   │   ├── wt/                   # wt (git worktree switcher) config
+│   │   └── zsh/                  # zsh config (ZDOTDIR)
+│   ├── .local/                   # User-level binaries (~/.local/bin)
+│   │   └── bin/                  # Helper scripts on PATH
+│   │       ├── tmux-sessionizer  # Pick a project and open it in tmux
+│   │       ├── ws                # jj workspace switcher
+│   │       └── wt                # git worktree switcher
+│   ├── .plannotator/             # Plannotator config (data dir; runtime state untracked)
+│   └── .zshenv                   # ZDOTDIR bootstrap (sets zsh config to ~/.config/zsh/)
+├── scripts/                      # Platform install scripts (run by install)
+│   ├── arch/                     # Arch Linux-specific
+│   │   └── pacman.sh             # pacman packages + rustup init
+│   ├── common/                   # Portable install modules (all platforms)
+│   │   ├── hunk.sh               # hunk (terminal diff viewer)
+│   │   ├── nvm.sh                # nvm + Node LTS
+│   │   ├── oh-my-zsh.sh          # oh-my-zsh
+│   │   ├── plannotator.sh        # plannotator (plan/diff review UI)
+│   │   └── stow.sh               # GNU Stow symlinks
+│   ├── macos/                    # macOS-specific
+│   │   └── brew.sh               # Homebrew + packages + casks + rustup + opencode
+│   └── ubuntu/                   # Ubuntu/WSL-specific
+│       ├── apt.sh                # apt packages + build deps
+│       ├── neovim.sh             # Neovim (built from source)
+│       ├── opencode.sh           # opencode CLI
+│       ├── rustup.sh             # Rust toolchain
+│       └── uv.sh                 # Python package manager
+├── .gitignore                    # Git ignore rules
+├── README.md                     # This file
+└── install                       # Main entry point (detects OS)
 ```
 
 Symlinks are managed by [GNU Stow](https://www.gnu.org/software/stow/). The `home/`
