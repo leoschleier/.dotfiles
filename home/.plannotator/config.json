@@ -1,19 +1,20 @@
 {
-    "diffOptions": {
-        "defaultDiffType": "unstaged",
-        "diffStyle": "split"
-    },
-    "theme": {
-        "mode": "system",
-        "light": "plannotator",
-        "dark": "rose-pine"
-    },
-    "favicon": "totman",
-    "pfmReminder": true,
-    "agentSwitch": "build",
-    "displayName": "Leo Schleier",
-    "reviewAnalysis": {
-        "semanticDiff": true,
-        "callFlow": false
-    }
+  "diffOptions": {
+    "defaultDiffType": "unstaged",
+    "diffStyle": "split"
+  },
+  "theme": {
+    "mode": "system",
+    "light": "plannotator",
+    "dark": "rose-pine"
+  },
+  "favicon": "totman",
+  "pfmReminder": true,
+  "agentSwitch": "build",
+  "displayName": "Leo Schleier",
+  "reviewAnalysis": {
+    "semanticDiff": true,
+    "callFlow": false
+  },
+  "agentTool": true
 }
