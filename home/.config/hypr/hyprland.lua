@@ -34,6 +34,7 @@ local fileManager = "thunar"
 local menu = "hyprlauncher"
 local browser = "firefox"
 local notes = "obsidian"
+local screenshot = "flameshot gui"
 
 -------------------
 ---- AUTOSTART ----
@@ -281,8 +282,7 @@ hl.device({
 -- SUPER + arrows     - Move focus (left/right/up/down)
 -- SUPER + 1-9,0      - Switch to workspace 1-10
 -- SUPER + SHIFT + 1-9,0 - Move window to workspace 1-10
--- SUPER + S          - Toggle special workspace
--- SUPER + SHIFT + S  - Move window to special workspace
+-- SUPER + S          - Screenshot current monitor (flameshot)
 -- SUPER + scroll     - Cycle workspaces
 -- SUPER + mouse:272  - Drag window (LMB)
 -- SUPER + mouse:273  - Resize window (RMB)
@@ -321,9 +321,8 @@ for i = 1, 10 do
 	hl.bind(mainMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = i }))
 end
 
--- Example special workspace (scratchpad)
-hl.bind(mainMod .. " + S", hl.dsp.workspace.toggle_special("magic"))
-hl.bind(mainMod .. " + SHIFT + S", hl.dsp.window.move({ workspace = "special:magic" }))
+-- Screenshot of the monitor under the cursor
+hl.bind(mainMod .. " + S", hl.dsp.exec_cmd(screenshot))
 
 -- Scroll through existing workspaces with mainMod + scroll
 hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))

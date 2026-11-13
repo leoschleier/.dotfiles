@@ -116,20 +116,19 @@ Main modifier: `SUPER` (Windows key). Config lives in `home/.config/hypr/hyprlan
 
 ### Windows & workspaces
 
-| Key                   | Action                                |
-| --------------------- | ------------------------------------- |
-| `SUPER + C`           | Close active window                   |
-| `SUPER + V`           | Toggle floating / tiling              |
-| `SUPER + P`           | Toggle pseudo mode                    |
-| `SUPER + J`           | Toggle split direction (dwindle)      |
-| `SUPER + ←/→/↑/↓`     | Move focus                            |
-| `SUPER + 1-0`         | Switch to workspace 1–10              |
-| `SUPER + SHIFT + 1-0` | Move window to workspace 1–10         |
-| `SUPER + S`           | Toggle special workspace (scratchpad) |
-| `SUPER + SHIFT + S`   | Move window to special workspace      |
-| `SUPER + scroll`      | Cycle workspaces                      |
-| `SUPER + LMB drag`    | Drag window                           |
-| `SUPER + RMB drag`    | Resize window                         |
+| Key                   | Action                           |
+| --------------------- | -------------------------------- |
+| `SUPER + C`           | Close active window              |
+| `SUPER + V`           | Toggle floating / tiling         |
+| `SUPER + P`           | Toggle pseudo mode               |
+| `SUPER + J`           | Toggle split direction (dwindle) |
+| `SUPER + ←/→/↑/↓`     | Move focus                       |
+| `SUPER + 1-0`         | Switch to workspace 1–10         |
+| `SUPER + SHIFT + 1-0` | Move window to workspace 1–10    |
+| `SUPER + S`           | Take screenshot (flameshot)      |
+| `SUPER + scroll`      | Cycle workspaces                 |
+| `SUPER + LMB drag`    | Drag window                      |
+| `SUPER + RMB drag`    | Resize window                    |
 
 ### Media keys
 
