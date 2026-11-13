@@ -20,6 +20,7 @@
     ],
 
     "modules-right": [
+        "hyprland/language",
         "bluetooth",
         "network",
         "pulseaudio",
@@ -46,6 +47,12 @@
         "active-only": false,
         "on-scroll-up": "hyprctl dispatch workspace e+1",
         "on-scroll-down": "hyprctl dispatch workspace e-1"
+    },
+
+    "hyprland/language": {
+        "format": "󰌌  {}",
+        "format-en": "US",
+        "format-de": "DE"
     },
 
     "clock": {

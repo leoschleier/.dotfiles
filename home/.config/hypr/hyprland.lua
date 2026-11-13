@@ -232,10 +232,10 @@ hl.config({
 
 hl.config({
 	input = {
-		kb_layout = "us",
+		kb_layout = "us,de",
 		kb_variant = "",
 		kb_model = "",
-		kb_options = "ctrl:nocaps", -- Map Caps Lock to Ctrl
+		kb_options = "ctrl:nocaps,grp:win_space_toggle", -- Caps Lock -> Ctrl; SUPER+Space toggles us/de layout
 		kb_rules = "",
 
 		repeat_rate = 50,

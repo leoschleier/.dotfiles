@@ -83,6 +83,7 @@ button:hover {
 }
 
 #clock,
+#language,
 #battery,
 #cpu,
 #memory,
@@ -103,6 +104,10 @@ button:hover {
 #clock {
     color: @iris;
     background: @surface;
+}
+
+#language {
+    color: @gold;
 }
 
 #battery {
