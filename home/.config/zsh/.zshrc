@@ -141,6 +141,8 @@ export PATH=$HOME/.hunk/bin:$PATH
 
 # tmux-sessionizer key bindings
 bindkey -s "^f" "tmux-sessionizer\n"
+# Ctrl+A is the tmux and herdr prefix; use Ctrl+B for start of line
+bindkey "^b" beginning-of-line
 
 # wt — shell wrapper to allow cd from the worktree manager
 wt() {

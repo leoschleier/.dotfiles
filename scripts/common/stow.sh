@@ -10,6 +10,8 @@ mkdir -p "$HOME/.config"
 mkdir -p "$HOME/.local/bin"
 # Same for the Plannotator data dir: its runtime state must stay out of the repo.
 mkdir -p "$HOME/.plannotator"
+# herdr keeps sockets, logs and session state next to its config.
+mkdir -p "$HOME/.config/herdr"
 
 CONFLICT_FILE="$(mktemp)"
 trap 'rm -f "$CONFLICT_FILE"' EXIT
