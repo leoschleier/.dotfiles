@@ -1,7 +1,10 @@
 {
   "diffOptions": {
-    "defaultDiffType": "unstaged",
-    "diffStyle": "split"
+    "defaultDiffType": "since-base",
+    "diffStyle": "split",
+    "overflow": "wrap",
+    "diffIndicators": "bars",
+    "lineBgIntensity": "subtle"
   },
   "theme": {
     "mode": "system",
