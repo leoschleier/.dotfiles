@@ -44,6 +44,7 @@ Re-running `./install` is safe — all scripts are idempotent.
 │   ├── arch/                     # Arch Linux-specific
 │   │   └── pacman.sh             # pacman packages + rustup init
 │   ├── common/                   # Portable install modules (all platforms)
+│   │   ├── herdr.sh              # herdr
 │   │   ├── hunk.sh               # hunk (terminal diff viewer)
 │   │   ├── nvm.sh                # nvm + Node LTS
 │   │   ├── oh-my-zsh.sh          # oh-my-zsh
@@ -77,8 +78,8 @@ symlinks in `$HOME` matching the directory layout.
 ### Arch Linux (pacman)
 
 neovim, tmux, fzf, stow, ripgrep, fd, zsh, curl, git, gcc, tree-sitter-cli, uv, rustup,
-jujutsu, opencode — plus GUI apps ghostty, hyprland, obsidian, firefox. All from official repos
-(no AUR).
+jujutsu, opencode — plus GUI apps ghostty, hyprland, obsidian, firefox, nextcloud-client. All from
+official repos (no AUR).
 
 ### Ubuntu / WSL (apt)
 
@@ -93,6 +94,7 @@ Rustup, uv, and opencode are installed via their official installers.
 - **nvm + Node LTS** — installed to `~/.local/share/nvm`
 - **hunk** — installed to `~/.hunk/bin`
 - **plannotator** — installed to `~/.local/bin`
+- **herdr** — installed to `~/.local/bin`
 
 ## Adding a new config
 

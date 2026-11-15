@@ -38,6 +38,7 @@ PACKAGES=(
     mesa                        # Open-source OpenGL graphics drivers
     neovim                      # Text editor
     networkmanager              # Network connection manager
+    nextcloud-client            # Nextcloud desktop sync client
     noto-fonts                  # Broad Unicode glyph coverage
     noto-fonts-cjk              # CJK glyph coverage
     noto-fonts-emoji            # Color emoji
