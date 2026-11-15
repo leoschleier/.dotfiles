@@ -1,11 +1,24 @@
 onboarding = false
 
-[ui.toast]
-delivery = "herdr"
+[keys]
+prefix = "ctrl+a"
+switch_tab = "prefix+1..9"
+switch_workspace = "prefix+shift+1..9"
+focus_agent = "prefix+alt+1..9"
 
 [theme]
 name = "rose-pine"
 auto_switch = false
 
-[keys]
-prefix = "ctrl+a"
+[ui]
+tab_bar_position = "top"
+tab_bar_right = [
+    { type = "zoom" },
+    { type = "hostname" },
+    { type = "datetime", format = "%H:%M" },
+    { type = "command", command = "~/.config/herdr/status.sh", interval_seconds = 5, timeout_seconds = 2 },
+]
+tab_bar_right_separator = " · "
+
+[ui.toast]
+delivery = "herdr"
